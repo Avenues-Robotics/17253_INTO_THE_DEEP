@@ -1,20 +1,35 @@
-## TeamCode Module
+# **WELCOME!**
 
-Welcome!
+Hello and welcome to the Tritonics TeamCode module and git. This is the place where all the magic
+coding happens. You will find in this folder some basic classes that should be used almost anywhere
+and subfolders for each of our individual opModes. If you have any questions, just ask Noah or
+Sophia for help.
 
-This module, TeamCode, is the place where you will write/paste the code for your team's
-robot controller App. This module is currently empty (a clean slate) but the
-process for adding OpModes is straightforward.
+## Git
 
-## Creating your own OpModes
+This year the Trionics code is stored on a git directory, you may know git from GitHub. Git is
+generally considered the easiest way to share files. When you have changed a file you can go to the
+commit tab in android studio, type a message, and press commit and push. This will replace the
+file in the git directory with the one you have edited. Be careful with multiple people working on
+the same file though; you could overwrite each others code! Every time before you get to work, make
+sure that the version on your computer is up to date with whats in the directory. You can do this
+by going to git in the uppermost taskbar and clicking "pull." Then just click go and you'll be
+ready to go!
 
-The easiest way to create your own OpMode is to copy a Sample OpMode and make it your own.
+## Telem
 
-Sample opmodes exist in the FtcRobotController module.
-To locate these samples, find the FtcRobotController module in the "Project/Android" tab.
+The Telem class allows you to permanently add something to telemetry or remove it. For this to work
+you must ALWAYS USE Telem.update() NOT telemetry.update(). There is more information on this class
+in the comment above it inside it's file. You can also always ask Noah to explain anything that
+doesn't make sense to you.
 
-Expand the following tree elements:
- FtcRobotController/java/org.firstinspires.ftc.robotcontroller/external/samples
+## Ports
+
+Ports is the class that stores all of the hardware connected to the robots computer. This includes
+motors, cameras, odometry wheel etc. It also includes an init function that is run at the start of
+every opMode before the robot takes off, if you ever want to do something with the motors or other
+sensors, import that class. There is more information on it in the comment above it, and feel free
+to ask Noah to explain anything about it.
 
 ### Naming of Samples
 
