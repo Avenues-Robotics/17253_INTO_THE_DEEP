@@ -199,7 +199,7 @@ public class TeleopOpMode extends LinearOpMode {
                 ports.outtakeClaw.setPosition(0.15);
                 telemetry.addLine("set intake claw closed, set outtake claw open");
                 telemetry.update();
-                sleep(5000);
+                sleep(2000);
                 // bring intake claw up and over
                 ports.intakePitch.setPosition(0.4);
                 // bring outtake claw up and over
@@ -207,22 +207,22 @@ public class TeleopOpMode extends LinearOpMode {
                 ports.outtakePitchR.setPosition(1);
                 telemetry.addLine("set intake claw up and over, set outtake claw up and over");
                 telemetry.update();
-                sleep(5000);
+                sleep(2000);
                 // bring slides out enough so that the incoming claw doesn't bash them
                 if(ports.lsh_l.getCurrentPosition() < 1700 || ports.lsh_r.getCurrentPosition() < 1700){
-                    sleep(5000);
+                    sleep(2000);
                     ports.lsh_l.setPower(1);
                     ports.lsh_r.setPower(1);
                 } else {
-                    sleep(5000);
+                    sleep(2000);
                     ports.lsh_l.setPower(0);
                     ports.lsh_r.setPower(0);
                 }
                 // bring linear slides down
-                sleep(5000);
+                sleep(2000);
                 ports.lsv_l.setPower(lsv_lController.evaluate(-ports.lsv_l.getCurrentPosition()));
                 ports.lsv_r.setPower(lsv_rController.evaluate(-ports.lsv_r.getCurrentPosition()));
-                sleep(5000);
+                sleep(2000);
                 // begin handoff setup 2
                 if((ports.lsv_l.getCurrentPosition() < 20 || ports.lsv_r.getCurrentPosition() < 20) && (ports.lsh_l.getCurrentPosition() < 1700 || ports.lsh_r.getCurrentPosition() < 1700)){
                     handoffStep = 2;
