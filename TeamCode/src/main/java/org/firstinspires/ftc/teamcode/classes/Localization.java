@@ -9,7 +9,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.hardware.Ports;
 
-public class Localization {
+public class
+
+Localization {
 
     Pose3D robotPosition;
     Ports ports;

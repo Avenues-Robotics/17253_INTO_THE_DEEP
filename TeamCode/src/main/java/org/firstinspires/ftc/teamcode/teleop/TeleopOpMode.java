@@ -180,6 +180,24 @@ public class TeleopOpMode extends LinearOpMode {
                     ports.intakeRoll.setPosition(ports.intakeRoll.getPosition() - elapsedTime.seconds());
                 }
             }
+
+            // set points
+            // high chamber
+            if(currGamepad2.right_bumper && !prevGamepad2.right_bumper){
+                ports.lsv_l.setPower(lsv_lController.evaluate(-ports.lsv_l.getCurrentPosition()-1230));
+                ports.lsv_r.setPower(lsv_rController.evaluate(-ports.lsv_r.getCurrentPosition()-1230));
+            }
+            // high basket
+            if(currGamepad2.left_bumper && !prevGamepad2.left_bumper){
+                lsv_lController.runTo(-3125);
+                lsv_rController.runTo(-3125);
+            }
+            // low basket
+            if(currGamepad2.left_trigger !=0 && prevGamepad2.left_trigger!=0){
+                lsv_lController.runTo(-1230);
+                lsv_rController.runTo(-1230);
+            }
+
             /* HANDOFF ROUTINE:
              *
              * 1. intakeClaw -> 0.05 & outtakeClaw -> 0.15 & intakePitch -> 0.4 & outtakePitch -> 0 & horizontalSlides -> 1700 if horizontalSlides < 1700 & verticalSlides -> 0

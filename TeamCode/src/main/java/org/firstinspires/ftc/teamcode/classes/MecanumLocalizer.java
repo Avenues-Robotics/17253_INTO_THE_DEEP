@@ -15,18 +15,12 @@ public class MecanumLocalizer {
 
     ElapsedTime elapsedTime;
 
-    int currfr = 0;
-    int prevfr = 0;
-    int difffr = 0;
-    int currfl = 0;
-    int prevfl = 0;
-    int difffl = 0;
-    int currbr = 0;
-    int prevbr = 0;
-    int diffbr = 0;
-    int currbl = 0;
-    int prevbl = 0;
-    int diffbl = 0;
+    int currHoriz;
+    int prevHoriz;
+    double diffHoriz;
+    int currVerti;
+    int prevVerti;
+    double diffVerti;
 
     Ports ports;
 
@@ -38,26 +32,20 @@ public class MecanumLocalizer {
     public Pose3D loop() {
         if (elapsedTime.seconds() < 0.25) {
 
-            prevfr = currfr;
-            prevfl = currfl;
-            prevbr = currbr;
-            prevbl = currbl;
+            prevHoriz = currHoriz;
+            prevVerti = currVerti;
 
-            currfr = ports.fr.getCurrentPosition();
-            currfl = ports.fl.getCurrentPosition();
-            currbr = ports.br.getCurrentPosition();
-            currbl = ports.bl.getCurrentPosition();
+            currHoriz = ports.fl.getCurrentPosition();
+            currVerti = ports.fr.getCurrentPosition();
 
-            difffr = currfr - prevfr;
-            difffl = currfl - prevfl;
-            diffbr = currbr - prevbr;
-            diffbl = currbl - prevbl;
+            diffHoriz = (currHoriz - prevHoriz)*elapsedTime.seconds();
+            diffVerti = (currVerti - prevVerti)*elapsedTime.seconds();
 
             Pose3D out = new Pose3D(new Position(DistanceUnit.INCH,
-                    (double) (diffbr + diffbl)/2,
-                    (double) (diffbr - difffr)/2,
+                    diffVerti,
+                    diffHoriz,
                     0, elapsedTime.time(TimeUnit.SECONDS)), new YawPitchRollAngles(AngleUnit.DEGREES,
-                    (double) (diffbl - difffr)/2,
+                    0,
                     0, 0, elapsedTime.time(TimeUnit.SECONDS)));
 
             elapsedTime.reset();
