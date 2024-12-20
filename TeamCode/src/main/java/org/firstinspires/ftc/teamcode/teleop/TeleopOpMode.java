@@ -184,6 +184,10 @@ public class TeleopOpMode extends LinearOpMode {
             // set points
             // high chamber
             if(currGamepad2.right_bumper && !prevGamepad2.right_bumper){
+                lsv_lController.setup(-ports.lsv_l.getCurrentPosition()-1230);
+                lsv_rController.setup(-ports.lsv_r.getCurrentPosition()-1230);
+            }
+            if(currGamepad2.right_bumper){
                 ports.lsv_l.setPower(lsv_lController.evaluate(-ports.lsv_l.getCurrentPosition()-1230));
                 ports.lsv_r.setPower(lsv_rController.evaluate(-ports.lsv_r.getCurrentPosition()-1230));
             }
