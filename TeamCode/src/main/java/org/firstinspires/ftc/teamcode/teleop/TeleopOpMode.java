@@ -197,13 +197,13 @@ public class TeleopOpMode extends LinearOpMode {
                 // if the current position is -1000, should it be
                 // -1230 - (-1000) = -230
                 // Right? - SC
-                lsv_lController.setup(-ports.lsv_l.getCurrentPosition()-1230);
-                lsv_rController.setup(-ports.lsv_r.getCurrentPosition()-1230);
+                lsv_lController.setup(1230-ports.lsv_l.getCurrentPosition());
+                lsv_rController.setup(1230-ports.lsv_r.getCurrentPosition());
             }
             if(currGamepad2.right_bumper){
                 // Same comment as above. -SC
-                ports.lsv_l.setPower(lsv_lController.evaluate(-ports.lsv_l.getCurrentPosition()-1230));
-                ports.lsv_r.setPower(lsv_rController.evaluate(-ports.lsv_r.getCurrentPosition()-1230));
+                ports.lsv_l.setPower(lsv_lController.evaluate(1230-ports.lsv_l.getCurrentPosition()));
+                ports.lsv_r.setPower(lsv_rController.evaluate(1230-ports.lsv_r.getCurrentPosition()));
             }
             // high basket
             if(currGamepad2.left_bumper && !prevGamepad2.left_bumper){
