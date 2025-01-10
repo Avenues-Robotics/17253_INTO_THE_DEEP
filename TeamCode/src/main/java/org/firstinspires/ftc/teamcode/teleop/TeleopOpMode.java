@@ -207,15 +207,13 @@ public class TeleopOpMode extends LinearOpMode {
             }
             // high basket
             if(currGamepad2.left_bumper && !prevGamepad2.left_bumper){
-                lsv_lController.runTo(-3125);
-                lsv_rController.runTo(-3125);
+
             }
             // low basket
             // If you are going to use the trigger, use > 0.1 or something
             // like that, otherwise noise could make this conditional true -SC
-            if(currGamepad2.left_trigger !=0 && prevGamepad2.left_trigger!=0){
-                lsv_lController.runTo(-1230);
-                lsv_rController.runTo(-1230);
+            if(currGamepad2.left_trigger > .25 && prevGamepad2.left_trigger <= .25){
+
             }
 
             /* HANDOFF ROUTINE:
