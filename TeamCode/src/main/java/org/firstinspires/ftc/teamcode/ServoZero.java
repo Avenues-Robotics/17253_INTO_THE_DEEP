@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class ServoZero extends LinearOpMode {
     @Override
     public void runOpMode() {
+        waitForStart();
         this.hardwareMap.get(Servo.class, "zero").setPosition(0);
+        sleep(5000);
     }
 }

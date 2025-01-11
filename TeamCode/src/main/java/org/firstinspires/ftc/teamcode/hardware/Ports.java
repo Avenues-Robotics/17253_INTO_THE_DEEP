@@ -66,11 +66,11 @@ public class Ports {
 
          if (builder.allActive || builder.slidesActive || builder.lsv_rActive) {
              lsv_r = opMode.hardwareMap.get(DcMotor.class, "lsv_r");
-             lsv_r.setDirection(DcMotor.Direction.REVERSE);
          }
 
          if (builder.allActive || builder.slidesActive || builder.lsv_lActive) {
              lsv_l = opMode.hardwareMap.get(DcMotor.class, "lsv_l");
+             lsv_l.setDirection(DcMotor.Direction.REVERSE);
          }
 
          if (builder.allActive || builder.slidesActive || builder.lsh_rActive) {

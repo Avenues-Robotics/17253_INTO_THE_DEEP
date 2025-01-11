@@ -182,24 +182,38 @@ public class TeleopOpMode extends LinearOpMode {
             }
 
             // set points
+
+            // Comments from Mr. Carpenter below.
+            // Overall comment, why are all the positions negative?
+            // It's confusing, can you flip the motor directions for the
+            // vertical slides?
+
             // high chamber
             if(currGamepad2.right_bumper && !prevGamepad2.right_bumper){
-                lsv_lController.setup(-ports.lsv_l.getCurrentPosition()-1230);
-                lsv_rController.setup(-ports.lsv_r.getCurrentPosition()-1230);
+                // Is the math right here?  Seems to me that if the slides current
+                // position is 1000, you would want the error in .setup() to be 1230 - 1000 = 230
+                // Is my logic wrong?
+                // Or if the set point is supposed to be negative (-1230), then
+                // if the current position is -1000, should it be
+                // -1230 - (-1000) = -230
+                // Right? - SC
+                lsv_lController.setup(1230-ports.lsv_l.getCurrentPosition());
+                lsv_rController.setup(1230-ports.lsv_r.getCurrentPosition());
             }
             if(currGamepad2.right_bumper){
-                ports.lsv_l.setPower(lsv_lController.evaluate(-ports.lsv_l.getCurrentPosition()-1230));
-                ports.lsv_r.setPower(lsv_rController.evaluate(-ports.lsv_r.getCurrentPosition()-1230));
+                // Same comment as above. -SC
+                ports.lsv_l.setPower(lsv_lController.evaluate(1230-ports.lsv_l.getCurrentPosition()));
+                ports.lsv_r.setPower(lsv_rController.evaluate(1230-ports.lsv_r.getCurrentPosition()));
             }
             // high basket
             if(currGamepad2.left_bumper && !prevGamepad2.left_bumper){
-                lsv_lController.runTo(-3125);
-                lsv_rController.runTo(-3125);
+
             }
             // low basket
-            if(currGamepad2.left_trigger !=0 && prevGamepad2.left_trigger!=0){
-                lsv_lController.runTo(-1230);
-                lsv_rController.runTo(-1230);
+            // If you are going to use the trigger, use > 0.1 or something
+            // like that, otherwise noise could make this conditional true -SC
+            if(currGamepad2.left_trigger > .25 && prevGamepad2.left_trigger <= .25){
+
             }
 
             /* HANDOFF ROUTINE:
@@ -221,6 +235,10 @@ public class TeleopOpMode extends LinearOpMode {
                 ports.outtakeClaw.setPosition(0.15);
                 telemetry.addLine("set intake claw closed, set outtake claw open");
                 telemetry.update();
+                // I would avoid sleep() in teleop.  You have a loop running
+                // and you are interrupting that loop.  Use a timer and a while
+                // loop instead.  THen use state variables like handoffStep to control
+                // what can run or can't run while you are waiting.
                 sleep(2000);
                 // bring intake claw up and over
                 ports.intakePitch.setPosition(0.4);
