@@ -225,6 +225,7 @@ public class TeleopOpMode extends LinearOpMode {
              */
             if(currGamepad1.dpad_right && !prevGamepad1.dpad_right) {
                 handoffStep = 1;
+                // Why negative? -SC
                 lsv_lController.setup(-ports.lsv_l.getCurrentPosition());
                 lsv_rController.setup(-ports.lsv_r.getCurrentPosition());
             }
@@ -260,10 +261,12 @@ public class TeleopOpMode extends LinearOpMode {
                 }
                 // bring linear slides down
                 sleep(2000);
+                // Why negative? -SC
                 ports.lsv_l.setPower(lsv_lController.evaluate(-ports.lsv_l.getCurrentPosition()));
                 ports.lsv_r.setPower(lsv_rController.evaluate(-ports.lsv_r.getCurrentPosition()));
                 sleep(2000);
                 // begin handoff setup 2
+                // Shouldn't lsh_l and lsh_r be greater than 1700? -SC
                 if((ports.lsv_l.getCurrentPosition() < 20 || ports.lsv_r.getCurrentPosition() < 20) && (ports.lsh_l.getCurrentPosition() < 1700 || ports.lsh_r.getCurrentPosition() < 1700)){
                     handoffStep = 2;
                     telemetry.addLine("here now 1!");
