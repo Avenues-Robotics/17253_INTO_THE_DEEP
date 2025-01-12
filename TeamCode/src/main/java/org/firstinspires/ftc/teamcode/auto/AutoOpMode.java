@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.hardware.Driver;
 import org.firstinspires.ftc.teamcode.hardware.Ports;
 
 /*
@@ -24,24 +25,40 @@ public class AutoOpMode extends LinearOpMode {
 
     Ports ports;
     Ports.Builder builder;
-    public static double position;
-    public static long duration;
     Telemetry dashboardTelemetry;
+
+    public static double speedOne;
+    public static double cmOne;
+    public static double degreesOne;
+
+    public static double deg;
+
+    public static double speedTwo;
+    public static double cmTwo;
+    public static double degreesTwo;
 
     //Create the opmode function
     @Override
     public void runOpMode(){
         //initialize
         builder = new Ports.Builder();
-        builder.servosActive = true;
+        builder.allActive = true;
         ports = new Ports(this, builder);
         dashboardTelemetry = FtcDashboard.getInstance().getTelemetry();
 
         //wait for the game to start
         waitForStart();
 
-        ports.outtakePitchL.setPosition(0);
-        ports.outtakePitchR.setPosition(1);
-        sleep(3000);
+        Driver.drive(this, ports, 0.75, 85, 165);
+        Driver.drive(this, ports, 0.75, 20, 235);
+        Driver.drive(this, ports, 1, 20 , 0);
+        Driver.rotate(this, ports, 0.75, 195);
+        Driver.drive(this, ports, 1, 150, 90);
+        Driver.drive(this, ports, 1, 40, 180);
+        sleep(1000);
+        Driver.drive(this, ports, 1, 15, 180);
+        Driver.drive(this, ports, 1, 130, 290);
+        Driver.rotate(this, ports, 1, 155);
+        Driver.drive(this, ports, 1, 90, 150);
     }
 }
