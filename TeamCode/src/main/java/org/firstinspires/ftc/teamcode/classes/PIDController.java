@@ -24,6 +24,7 @@ public class PIDController {
     DcMotor slide;
     boolean isSetup = false;
 
+
     public PIDController(double Kp, double Ki, double Kd, double Kf, int tolerance, DcMotor output){
         this.Kp = Kp;
         this.Ki = Ki;
@@ -44,9 +45,10 @@ public class PIDController {
 
     public double evaluate(int error){
         integralSum += error * elapsedTime.time();
-        double output = error * Kp + integralSum * Ki + (error - lastError)*Kd/elapsedTime.time() + Kf;
+        double output = error * Kp + integralSum * Ki + (error - lastError) * Kd / elapsedTime.time() + Kf;
         elapsedTime.reset();
-        return(output);
+        return (output);
+
     }
 
     public void runTo(int target){
@@ -54,9 +56,11 @@ public class PIDController {
             setup(target-slide.getCurrentPosition());
             isSetup = true;
         }
-        while(slide.getCurrentPosition() > target+tolerance || slide.getCurrentPosition() < target-tolerance){
-            slide.setPower(evaluate(target-slide.getCurrentPosition()));
+
+        while (slide.getCurrentPosition() > target + tolerance || slide.getCurrentPosition() < target - tolerance) {
+            slide.setPower(evaluate(target - slide.getCurrentPosition()));
         }
+
         slide.setPower(0);
         isSetup = false;
     }

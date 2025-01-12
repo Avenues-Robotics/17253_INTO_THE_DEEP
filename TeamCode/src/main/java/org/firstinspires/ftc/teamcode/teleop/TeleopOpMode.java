@@ -33,6 +33,8 @@ public class TeleopOpMode extends LinearOpMode {
     boolean intakeInverse = false;
     int handoffStep = 0;
 
+    boolean buttonPressed = false;
+
     ElapsedTime elapsedTime = new ElapsedTime();
 
     PIDController lsv_lController;
@@ -81,6 +83,7 @@ public class TeleopOpMode extends LinearOpMode {
         localizer = new Localization(this, ports, new Pose3D(startingPosition, startingRotation));
 
         double max;
+        double tolerance = 30;
 
         waitForStart();
 
@@ -140,46 +143,49 @@ public class TeleopOpMode extends LinearOpMode {
                 ports.lsh_r.setPower(0);
                 ports.lsh_l.setPower(0);
             }
+
+
             // FLIPS THE OUTTAKE CLAW OVER THE ROBOT FROM OUTSIDE TO INSIDE
-            if(currGamepad2.dpad_up){
-                ports.outtakePitchL.setPosition(1);
-                ports.outtakePitchR.setPosition(0);
-            } else if(currGamepad2.dpad_down){
-                ports.outtakePitchL.setPosition(0);
-                ports.outtakePitchR.setPosition(1);
-            }
-            // opens and closes outtake claw
-            if(currGamepad2.dpad_right){
-                ports.outtakeClaw.setPosition(0.25);
-            } else if(currGamepad2.dpad_left){
-                ports.outtakeClaw.setPosition(0);
-            }
-            // open and closes intake claw
-            if(currGamepad2.x && !prevGamepad2.x){
-                if(intakeInverse) {
-                    ports.intakeClaw.setPosition(0.85); // open
-                    intakeInverse = false;
-                } else {
-                    ports.intakeClaw.setPosition(0.05); // closed
-                }
-            }
-            // rotates intake claw up and down
-            if(currGamepad2.a && !prevGamepad2.a){
-                if(intakeInverse){
-                    ports.intakePitch.setPosition(0.4);
-                    intakeInverse = false;
-                } else {
-                    ports.intakePitch.setPosition(0.1);
-                }
-            }
+//            if(currGamepad2.dpad_up){
+//                ports.outtakePitchL.setPosition(1);
+//                ports.outtakePitchR.setPosition(0);
+//            } else if(currGamepad2.dpad_down){
+//                ports.outtakePitchL.setPosition(0);
+//                ports.outtakePitchR.setPosition(1);
+//            }
+//            // opens and closes outtake claw
+//            if(currGamepad2.dpad_right){
+//                ports.outtakeClaw.setPosition(0.25);
+//            } else if(currGamepad2.dpad_left){
+//                ports.outtakeClaw.setPosition(0);
+//            }
+//            // open and closes intake claw
+//            if(currGamepad2.x && !prevGamepad2.x){
+//                if(intakeInverse) {
+//                    ports.intakeClaw.setPosition(0.85); // open
+//                    intakeInverse = false;
+//                } else {
+//                    ports.intakeClaw.setPosition(0.05); // closed
+//                }
+//            }
+//            // rotates intake claw up and down
+//            if(currGamepad2.a && !prevGamepad2.a){
+//                if(intakeInverse){
+//                    ports.intakePitch.setPosition(0.4);
+//                    intakeInverse = false;
+//                } else {
+//                    ports.intakePitch.setPosition(0.1);
+//                }
+//            }
+
             // horizontal rotates intake claw
-            if(currGamepad2.b) {
-                if(intakeInverse){
-                    ports.intakeRoll.setPosition(ports.intakeRoll.getPosition() + elapsedTime.seconds());
-                } else {
-                    ports.intakeRoll.setPosition(ports.intakeRoll.getPosition() - elapsedTime.seconds());
-                }
-            }
+//            if(currGamepad2.b) {
+//                if(intakeInverse){
+//                    ports.intakeRoll.setPosition(ports.intakeRoll.getPosition() + elapsedTime.seconds());
+//                } else {
+//                    ports.intakeRoll.setPosition(ports.intakeRoll.getPosition() - elapsedTime.seconds());
+//                }
+//            }
 
             // set points
 
@@ -189,32 +195,50 @@ public class TeleopOpMode extends LinearOpMode {
             // vertical slides?
 
             // high chamber
-            if(currGamepad2.right_bumper && !prevGamepad2.right_bumper){
-                // Is the math right here?  Seems to me that if the slides current
-                // position is 1000, you would want the error in .setup() to be 1230 - 1000 = 230
-                // Is my logic wrong?
-                // Or if the set point is supposed to be negative (-1230), then
-                // if the current position is -1000, should it be
-                // -1230 - (-1000) = -230
-                // Right? - SC
-                lsv_lController.setup(1230-ports.lsv_l.getCurrentPosition());
-                lsv_rController.setup(1230-ports.lsv_r.getCurrentPosition());
+            if(gamepad1.a){
+                buttonPressed=true;
             }
-            if(currGamepad2.right_bumper){
-                // Same comment as above. -SC
-                ports.lsv_l.setPower(lsv_lController.evaluate(1230-ports.lsv_l.getCurrentPosition()));
-                ports.lsv_r.setPower(lsv_rController.evaluate(1230-ports.lsv_r.getCurrentPosition()));
+            if(buttonPressed){
+                if(ports.lsv_l.getCurrentPosition() > 1230 - tolerance || ports.lsv_l.getCurrentPosition() < 1230 + tolerance || ports.lsv_r.getCurrentPosition() > 1230 - tolerance || ports.lsv_r.getCurrentPosition() < 1230 + tolerance){ // within tolerances
+                    ports.lsv_l.setPower(lsv_lController.evaluate(1230 - ports.lsv_l.getCurrentPosition()));
+                    ports.lsv_r.setPower(lsv_rController.evaluate(1230 - ports.lsv_r.getCurrentPosition()));
+                } else {
+                    buttonPressed=false;
+                }
             }
-            // high basket
-            if(currGamepad2.left_bumper && !prevGamepad2.left_bumper){
 
+            // high basket
+            if(gamepad1.dpad_up){
+                buttonPressed=true;
             }
+            if(buttonPressed){
+                if(ports.lsv_l.getCurrentPosition() > 3500 - tolerance || ports.lsv_l.getCurrentPosition() < 3500 + tolerance || ports.lsv_r.getCurrentPosition() > 3500 - tolerance || ports.lsv_r.getCurrentPosition() < 3500 + tolerance){ // within tolerances
+                    ports.lsv_l.setPower(lsv_lController.evaluate(3500 - ports.lsv_l.getCurrentPosition()));
+                    ports.lsv_r.setPower(lsv_rController.evaluate(3500 - ports.lsv_r.getCurrentPosition()));
+                } else {
+                    buttonPressed=false;
+                }
+            }
+
+            if(currGamepad1.b && !prevGamepad1.b){
+                ports.specimenClaw.setPosition(0.8);
+            }
+            if(currGamepad1.y && !prevGamepad1.y){
+                ports.specimenClaw.setPosition(0);
+            }
+
+
+
+            // high basket
+//            if(currGamepad2.left_bumper && !prevGamepad2.left_bumper){
+//
+//            }
             // low basket
             // If you are going to use the trigger, use > 0.1 or something
             // like that, otherwise noise could make this conditional true -SC
-            if(currGamepad2.left_trigger > .25 && prevGamepad2.left_trigger <= .25){
-
-            }
+//            if(currGamepad2.left_trigger > .25 && prevGamepad2.left_trigger <= .25){
+//
+//            }
 
             /* HANDOFF ROUTINE:
              *
@@ -223,55 +247,55 @@ public class TeleopOpMode extends LinearOpMode {
              * 3. outtakeClaw -> 0.25 & intakeClaw -> 0.03
              * 4. horizontalSlides -> 1300
              */
-            if(currGamepad1.dpad_right && !prevGamepad1.dpad_right) {
-                handoffStep = 1;
-                // Why negative? -SC
-                lsv_lController.setup(-ports.lsv_l.getCurrentPosition());
-                lsv_rController.setup(-ports.lsv_r.getCurrentPosition());
-            }
-            if(handoffStep == 1){
-                // set claw to closed
-                ports.intakeClaw.setPosition(0.85);
-                // set intake claw open
-                ports.outtakeClaw.setPosition(0.15);
-                telemetry.addLine("set intake claw closed, set outtake claw open");
-                telemetry.update();
-                // I would avoid sleep() in teleop.  You have a loop running
-                // and you are interrupting that loop.  Use a timer and a while
-                // loop instead.  THen use state variables like handoffStep to control
-                // what can run or can't run while you are waiting.
-                sleep(2000);
-                // bring intake claw up and over
-                ports.intakePitch.setPosition(0.4);
-                // bring outtake claw up and over
-                ports.outtakePitchL.setPosition(0);
-                ports.outtakePitchR.setPosition(1);
-                telemetry.addLine("set intake claw up and over, set outtake claw up and over");
-                telemetry.update();
-                sleep(2000);
-                // bring slides out enough so that the incoming claw doesn't bash them
-                if(ports.lsh_l.getCurrentPosition() < 1700 || ports.lsh_r.getCurrentPosition() < 1700){
-                    sleep(2000);
-                    ports.lsh_l.setPower(1);
-                    ports.lsh_r.setPower(1);
-                } else {
-                    sleep(2000);
-                    ports.lsh_l.setPower(0);
-                    ports.lsh_r.setPower(0);
-                }
-                // bring linear slides down
-                sleep(2000);
-                // Why negative? -SC
-                ports.lsv_l.setPower(lsv_lController.evaluate(-ports.lsv_l.getCurrentPosition()));
-                ports.lsv_r.setPower(lsv_rController.evaluate(-ports.lsv_r.getCurrentPosition()));
-                sleep(2000);
-                // begin handoff setup 2
-                // Shouldn't lsh_l and lsh_r be greater than 1700? -SC
-                if((ports.lsv_l.getCurrentPosition() < 20 || ports.lsv_r.getCurrentPosition() < 20) && (ports.lsh_l.getCurrentPosition() < 1700 || ports.lsh_r.getCurrentPosition() < 1700)){
-                    handoffStep = 2;
-                    telemetry.addLine("here now 1!");
-                }
-            }
+//            if(currGamepad1.dpad_right && !prevGamepad1.dpad_right) {
+//                handoffStep = 1;
+//                // Why negative? -SC
+//                lsv_lController.setup(-ports.lsv_l.getCurrentPosition());
+//                lsv_rController.setup(-ports.lsv_r.getCurrentPosition());
+//            }
+//            if(handoffStep == 1){
+//                // set claw to closed
+//                ports.intakeClaw.setPosition(0.85);
+//                // set intake claw open
+//                ports.outtakeClaw.setPosition(0.15);
+//                telemetry.addLine("set intake claw closed, set outtake claw open");
+//                telemetry.update();
+//                // I would avoid sleep() in teleop.  You have a loop running
+//                // and you are interrupting that loop.  Use a timer and a while
+//                // loop instead.  THen use state variables like handoffStep to control
+//                // what can run or can't run while you are waiting.
+//                sleep(2000);
+//                // bring intake claw up and over
+//                ports.intakePitch.setPosition(0.4);
+//                // bring outtake claw up and over
+//                ports.outtakePitchL.setPosition(0);
+//                ports.outtakePitchR.setPosition(1);
+//                telemetry.addLine("set intake claw up and over, set outtake claw up and over");
+//                telemetry.update();
+//                sleep(2000);
+//                // bring slides out enough so that the incoming claw doesn't bash them
+//                if(ports.lsh_l.getCurrentPosition() < 1700 || ports.lsh_r.getCurrentPosition() < 1700){
+//                    sleep(2000);
+//                    ports.lsh_l.setPower(1);
+//                    ports.lsh_r.setPower(1);
+//                } else {
+//                    sleep(2000);
+//                    ports.lsh_l.setPower(0);
+//                    ports.lsh_r.setPower(0);
+//                }
+//                // bring linear slides down
+//                sleep(2000);
+//                // Why negative? -SC
+//                ports.lsv_l.setPower(lsv_lController.evaluate(-ports.lsv_l.getCurrentPosition()));
+//                ports.lsv_r.setPower(lsv_rController.evaluate(-ports.lsv_r.getCurrentPosition()));
+//                sleep(2000);
+//                // begin handoff setup 2
+//                // Shouldn't lsh_l and lsh_r be greater than 1700? -SC
+//                if((ports.lsv_l.getCurrentPosition() < 20 || ports.lsv_r.getCurrentPosition() < 20) && (ports.lsh_l.getCurrentPosition() < 1700 || ports.lsh_r.getCurrentPosition() < 1700)){
+//                    handoffStep = 2;
+//                    telemetry.addLine("here now 1!");
+//                }
+//            }
 //            if(handoffStep == 2){
 //                telemetry.addLine("here now 2!");
 //                // slightly widen intake claw so it's ready to hand the specimen off to the outtake claw

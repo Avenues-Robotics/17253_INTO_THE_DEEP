@@ -34,6 +34,7 @@ public class Ports {
     public Servo intakeClaw;
     public Servo intakePitch;
     public Servo intakeRoll;
+    public Servo specimenClaw;
 
     //Outtake Servos
     public Servo outtakeClaw;
@@ -109,6 +110,10 @@ public class Ports {
          if (builder.allActive || builder.servosActive || builder.outtakePitchRActive) {
              outtakePitchR = opMode.hardwareMap.get(Servo.class, "outtakePitchR");
          }
+
+         if (builder.allActive || builder.wheelsActive || builder.frActive) {
+             specimenClaw = opMode.hardwareMap.get(Servo.class, "specimenClaw");
+         }
      }
 
      public static class Builder {
@@ -120,6 +125,7 @@ public class Ports {
          public boolean outtakeClawActive = false;
          public boolean outtakePitchLActive = false;
          public boolean outtakePitchRActive = false;
+         public boolean specimenClawActive = false;
          public boolean allActive = false;
          public boolean frActive = false;
          public boolean flActive = false;
