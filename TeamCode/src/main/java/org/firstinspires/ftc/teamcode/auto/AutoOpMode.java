@@ -49,16 +49,23 @@ public class AutoOpMode extends LinearOpMode {
         //wait for the game to start
         waitForStart();
 
-        Driver.drive(this, ports, 0.75, 85, 165);
+        Driver.drive(this, ports, 0.75, 85, 165); // Merge this with slide lifting and claw rotating
+        // Release thru-take claw
         Driver.drive(this, ports, 0.75, 20, 235);
-        Driver.drive(this, ports, 1, 20 , 0);
+        // Flip claw
+        Driver.drive(this, ports, 1, 20 , 0); // Merge with slide lowering
         Driver.rotate(this, ports, 0.75, 195);
         Driver.drive(this, ports, 1, 150, 90);
         Driver.drive(this, ports, 1, 40, 180);
         sleep(1000);
         Driver.drive(this, ports, 1, 15, 180);
-        Driver.drive(this, ports, 1, 130, 290);
+        // Grip thru-take claw on specimen
+        // Sleep for grip to complete
+        Driver.drive(this, ports, 1, 130, 290); // Merge this with slide lifting
+        // Flip claw
         Driver.rotate(this, ports, 1, 155);
         Driver.drive(this, ports, 1, 90, 150);
+        // Release claw
+        // Drive to parking area
     }
 }
