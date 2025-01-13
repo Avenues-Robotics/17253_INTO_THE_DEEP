@@ -45,23 +45,28 @@ public class AutoOpMode extends LinearOpMode {
         //wait for the game to start
         waitForStart();
 
-        Driver.driveSlides(this, ports, 0.75, 85, 165, lsv_lController, lsv_rController, 1000); // Merge this with slide lifting and claw rotating
-        // Release thru-take claw
+        ports.specimenClaw.setPosition(1);
+        ports.outtakePitchR.setPosition(0);
+        ports.outtakePitchL.setPosition(1);
+        Driver.driveSlides(this, ports, 0.75, 85, 165, lsv_lController, lsv_rController, 1000);
+        ports.specimenClaw.setPosition(0);
         Driver.drive(this, ports, 0.75, 20, 235);
-        // Flip claw
-        Driver.drive(this, ports, 1, 20 , 0); // Merge with slide lowering
+        ports.outtakePitchR.setPosition(1);
+        ports.outtakePitchL.setPosition(0);
+        Driver.driveSlides(this, ports, 1, 20 , 0, lsv_lController, lsv_rController, 0);
         Driver.rotate(this, ports, 0.75, 195);
         Driver.drive(this, ports, 1, 150, 90);
         Driver.drive(this, ports, 1, 40, 180);
         sleep(1000);
         Driver.drive(this, ports, 1, 15, 180);
-        // Grip thru-take claw on specimen
-        // Sleep for grip to complete
-        Driver.drive(this, ports, 1, 130, 290); // Merge this with slide lifting
-        // Flip claw
+        ports.specimenClaw.setPosition(1);
+        sleep(750);
+        Driver.driveSlides(this, ports, 1, 130, 290, lsv_lController, lsv_rController, 1000);
+        ports.outtakePitchR.setPosition(0);
+        ports.outtakePitchL.setPosition(1);
         Driver.rotate(this, ports, 1, 155);
         Driver.drive(this, ports, 1, 90, 150);
-        // Release claw
+        ports.specimenClaw.setPosition(0);
         // Drive to parking area
     }
 }
