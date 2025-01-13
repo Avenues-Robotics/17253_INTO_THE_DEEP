@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.classes.PIDController;
 import org.firstinspires.ftc.teamcode.hardware.Driver;
 import org.firstinspires.ftc.teamcode.hardware.Ports;
 
@@ -27,15 +28,8 @@ public class AutoOpMode extends LinearOpMode {
     Ports.Builder builder;
     Telemetry dashboardTelemetry;
 
-    public static double speedOne;
-    public static double cmOne;
-    public static double degreesOne;
-
-    public static double deg;
-
-    public static double speedTwo;
-    public static double cmTwo;
-    public static double degreesTwo;
+    PIDController lsv_lController;
+    PIDController lsv_rController;
 
     //Create the opmode function
     @Override
@@ -45,11 +39,13 @@ public class AutoOpMode extends LinearOpMode {
         builder.allActive = true;
         ports = new Ports(this, builder);
         dashboardTelemetry = FtcDashboard.getInstance().getTelemetry();
+        lsv_lController = new PIDController(0.0127, 0.0004, 0.000001, 0.06, 20, ports.lsv_l);
+        lsv_rController = new PIDController(0.0127, 0.0004, 0.000001, 0.06, 20, ports.lsv_r);
 
         //wait for the game to start
         waitForStart();
 
-        Driver.drive(this, ports, 0.75, 85, 165); // Merge this with slide lifting and claw rotating
+        Driver.driveSlides(this, ports, 0.75, 85, 165, lsv_lController, lsv_rController, 1000); // Merge this with slide lifting and claw rotating
         // Release thru-take claw
         Driver.drive(this, ports, 0.75, 20, 235);
         // Flip claw
