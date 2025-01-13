@@ -7,6 +7,8 @@ import static java.lang.Math.sin;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.classes.PIDController;
+
 /*
  * USAGE GUIDE:
  *
@@ -80,6 +82,79 @@ public class Driver {
 
         // Run while the motors are moving
         while (ports.fr.isBusy() || ports.fl.isBusy()) {
+
+            // Update the telem data
+            opMode.telemetry.addData("Running to", "Font Right and Back Left: " + frblTicks + " | Front Left and Back Right: " + flbrTicks);
+            opMode.telemetry.addData("Current pos", "Front Right: " + ports.fr.getCurrentPosition() + " | Front Left: " + ports.fl.getCurrentPosition() + " | Back Right: " + ports.br.getCurrentPosition() + " | Back Left: " + ports.bl.getCurrentPosition());
+            Telem.update(opMode);
+        }
+
+        Telem.remove("Drive Status");
+
+        // Stop the motors
+        ports.fr.setPower(0);
+        ports.fl.setPower(0);
+        ports.br.setPower(0);
+        ports.bl.setPower(0);
+
+    }
+
+    //drive function, input speed, distance in cm, and degree angle of the movement
+    public static void driveSlides(LinearOpMode opMode, Ports ports, double speed, double cm, double degrees, PIDController slideOne, PIDController slideTwo, int target) {
+
+        //Instantiate the multipliers that will control the speed of each wheel
+        double frblMultiplier;
+        double flbrMultiplier;
+
+        double radians = degrees * PI / 180;
+
+        frblMultiplier = cos(radians)-sin(radians);
+        flbrMultiplier = cos(radians)+sin(radians);
+
+        //Debug (if power level caps)
+        if (speed*frblMultiplier > 1 || speed*flbrMultiplier > 1) {
+            Telem.add("Drive Status", "The set speed and direction has maxed out the speed of one of the wheels. Direction and speed may not be accurate");
+        }
+
+        // Reset the tick encoders to zero
+        ports.fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ports.fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ports.br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ports.bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //Calculate the number of ticks based on the distance and a conversion constant
+        int ticks = (int) (cm * 17.467);
+
+        //Calculate the number of ticks required for each motor to move
+        int frblTicks = (int) (ticks * frblMultiplier);
+        int flbrTicks = (int) (ticks * flbrMultiplier);
+
+        // set the target position
+        ports.fr.setTargetPosition(frblTicks);
+        ports.fl.setTargetPosition(flbrTicks);
+        ports.br.setTargetPosition(flbrTicks);
+        ports.bl.setTargetPosition(frblTicks);
+
+        // Change the mode to spin until reaching the position
+        ports.fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ports.fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ports.br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ports.bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // make the motors run at the given speed
+        ports.fr.setPower(speed * frblMultiplier);
+        ports.fl.setPower(speed * flbrMultiplier);
+        ports.br.setPower(speed * flbrMultiplier);
+        ports.bl.setPower(speed * frblMultiplier);
+
+        slideOne.setup(target - slideOne.getSlide().getCurrentPosition());
+        slideTwo.setup(target - slideTwo.getSlide().getCurrentPosition());
+
+        // Run while the motors are moving
+        while (ports.fr.isBusy() || ports.fl.isBusy() || slideOne.getSlide().getPower() < 0.2 || slideTwo.getSlide().getPower() < 0.2) {
+
+            slideOne.getSlide().setPower(slideOne.evaluate(target - slideOne.getSlide().getCurrentPosition()));
+            slideTwo.getSlide().setPower(slideTwo.evaluate(target - slideTwo.getSlide().getCurrentPosition()));
 
             // Update the telem data
             opMode.telemetry.addData("Running to", "Font Right and Back Left: " + frblTicks + " | Front Left and Back Right: " + flbrTicks);
