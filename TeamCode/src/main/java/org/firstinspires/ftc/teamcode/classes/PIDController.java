@@ -64,4 +64,8 @@ public class PIDController {
         slide.setPower(0);
         isSetup = false;
     }
+
+    public DcMotor getSlide() {
+        return slide;
+    }
 }
