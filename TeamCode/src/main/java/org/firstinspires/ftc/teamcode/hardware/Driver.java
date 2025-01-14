@@ -81,8 +81,7 @@ public class Driver {
         ports.bl.setPower(speed * frblMultiplier);
 
         // Run while the motors are moving
-        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) < 10 ||
-                Math.abs(ports.fl.getTargetPosition()-ports.fl.getCurrentPosition()) < 10) {
+        while (ports.fr.isBusy() || ports.fl.isBusy()) {
 
             // Update the telem data
             opMode.telemetry.addData("Running to", "Font Right and Back Left: " + frblTicks + " | Front Left and Back Right: " + flbrTicks);
@@ -152,22 +151,19 @@ public class Driver {
         slideTwo.setup(target - slideTwo.getSlide().getCurrentPosition());
 
         // Run while the motors are moving
-        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) < 10 ||
-                Math.abs(ports.fl.getTargetPosition()-ports.fl.getCurrentPosition()) < 10 //||
-                //Math.abs(target - slideOne.getSlide().getCurrentPosition()) < 20
-        ) {
+        while (ports.fr.isBusy() || ports.fl.isBusy()// ||
+         //       Math.abs(target - slideOne.getSlide().getCurrentPosition()) < 20 ||
+         //       Math.abs(target - slideTwo.getSlide().getCurrentPosition()) < 20//
+         ) {
 
             slideOne.getSlide().setPower(slideOne.evaluate(target - slideOne.getSlide().getCurrentPosition()));
-            slideTwo.getSlide().setPower(slideOne.evaluate(target - slideOne.getSlide().getCurrentPosition()));
+            slideTwo.getSlide().setPower(slideTwo.evaluate(target - slideTwo.getSlide().getCurrentPosition()));
 
             // Update the telem data
             opMode.telemetry.addData("Running to", "Font Right and Back Left: " + frblTicks + " | Front Left and Back Right: " + flbrTicks);
             opMode.telemetry.addData("Current pos", "Front Right: " + ports.fr.getCurrentPosition() + " | Front Left: " + ports.fl.getCurrentPosition() + " | Back Right: " + ports.br.getCurrentPosition() + " | Back Left: " + ports.bl.getCurrentPosition());
             Telem.update(opMode);
         }
-
-        slideOne.getSlide().setPower(0.06);
-        slideTwo.getSlide().setPower(0.06);
 
         Telem.remove("Drive Status");
 
@@ -402,9 +398,5 @@ public class Driver {
             ports.lsv_r.setPower(0);
             ports.lsv_l.setPower(0);
         }
-    }
-
-    public static void handoff(LinearOpMode opMode, Ports ports) {
-        ports
     }
 }
