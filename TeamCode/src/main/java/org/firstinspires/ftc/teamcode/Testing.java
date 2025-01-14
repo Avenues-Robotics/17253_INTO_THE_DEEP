@@ -17,6 +17,8 @@ public class Testing extends LinearOpMode {
     Ports ports;
     Ports.Builder portsBuilder;
 
+    public static double grip;
+
     @Override
     public void runOpMode() {
 
@@ -28,6 +30,6 @@ public class Testing extends LinearOpMode {
 
         waitForStart();
 
-        Driver.handoff(this, ports);
+        ports.specimenClaw.setPosition(grip);
     }
 }

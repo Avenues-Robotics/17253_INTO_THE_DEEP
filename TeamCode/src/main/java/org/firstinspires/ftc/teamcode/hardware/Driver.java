@@ -81,7 +81,8 @@ public class Driver {
         ports.bl.setPower(speed * frblMultiplier);
 
         // Run while the motors are moving
-        while (ports.fr.isBusy() || ports.fl.isBusy()) {
+        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 30 ||
+                Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 30) {
 
             // Update the telem data
             opMode.telemetry.addData("Running to", "Font Right and Back Left: " + frblTicks + " | Front Left and Back Right: " + flbrTicks);
@@ -151,13 +152,12 @@ public class Driver {
         slideTwo.setup(target - slideTwo.getSlide().getCurrentPosition());
 
         // Run while the motors are moving
-        while (ports.fr.isBusy() || ports.fl.isBusy()// ||
-         //       Math.abs(target - slideOne.getSlide().getCurrentPosition()) < 20 ||
-         //       Math.abs(target - slideTwo.getSlide().getCurrentPosition()) < 20//
+        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 30 ||
+                Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 30
          ) {
 
             slideOne.getSlide().setPower(slideOne.evaluate(target - slideOne.getSlide().getCurrentPosition()));
-            slideTwo.getSlide().setPower(slideTwo.evaluate(target - slideTwo.getSlide().getCurrentPosition()));
+            slideTwo.getSlide().setPower(slideOne.evaluate(target - slideOne.getSlide().getCurrentPosition()));
 
             // Update the telem data
             opMode.telemetry.addData("Running to", "Font Right and Back Left: " + frblTicks + " | Front Left and Back Right: " + flbrTicks);
