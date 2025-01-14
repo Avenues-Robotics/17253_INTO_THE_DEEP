@@ -151,7 +151,10 @@ public class Driver {
         slideTwo.setup(target - slideTwo.getSlide().getCurrentPosition());
 
         // Run while the motors are moving
-        while (ports.fr.isBusy() || ports.fl.isBusy() || slideOne.getSlide().getPower() < 0.2 || slideTwo.getSlide().getPower() < 0.2) {
+        while (ports.fr.isBusy() || ports.fl.isBusy()// ||
+         //       Math.abs(target - slideOne.getSlide().getCurrentPosition()) < 20 ||
+         //       Math.abs(target - slideTwo.getSlide().getCurrentPosition()) < 20
+         ) {
 
             slideOne.getSlide().setPower(slideOne.evaluate(target - slideOne.getSlide().getCurrentPosition()));
             slideTwo.getSlide().setPower(slideTwo.evaluate(target - slideTwo.getSlide().getCurrentPosition()));
