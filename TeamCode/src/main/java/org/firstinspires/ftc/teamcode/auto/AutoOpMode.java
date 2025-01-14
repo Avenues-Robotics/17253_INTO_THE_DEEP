@@ -31,9 +31,7 @@ public class AutoOpMode extends LinearOpMode {
     PIDController lsv_lController;
     PIDController lsv_rController;
 
-    public static int deg = 310;
-    public static int dist = 170;
-    public static int target = 200;
+    public static boolean isSpecimen = true;
 
     //Create the opmode function
     @Override
@@ -49,28 +47,31 @@ public class AutoOpMode extends LinearOpMode {
         //wait for the game to start
         waitForStart();
 
-        ports.specimenClaw.setPosition(1);
-        ports.outtakePitchR.setPosition(0);
-        ports.outtakePitchL.setPosition(1);
-        Driver.driveSlides(this, ports, 0.2, 85, 165, lsv_lController, lsv_rController, 500);
-        ports.specimenClaw.setPosition(0);
-        Driver.drive(this, ports, 0.75, 20, 235);
-        ports.outtakePitchR.setPosition(1);
-        ports.outtakePitchL.setPosition(0);
-        Driver.driveSlides(this, ports, 1, 20 , 0, lsv_lController, lsv_rController, 150);
-        Driver.rotate(this, ports, 0.75, 195);
-        Driver.drive(this, ports, 1, 150, 90);
-        Driver.drive(this, ports, 1, 40, 180);
-        sleep(1000);
-        Driver.drive(this, ports, 1, 15, 180);
-        ports.specimenClaw.setPosition(1);
-        sleep(750);
-        Driver.driveSlides(this, ports, 1, 130, 290, lsv_lController, lsv_rController, 500);
-        ports.outtakePitchR.setPosition(0);
-        ports.outtakePitchL.setPosition(1);
-        Driver.rotate(this, ports, 1, 155);
-        Driver.drive(this, ports, 1, 90, 150);
-        ports.specimenClaw.setPosition(0);
-        Driver.driveSlides(this, ports, 1, dist, deg, lsv_lController, lsv_rController, target);
+        if(isSpecimen) {
+            ports.specimenClaw.setPosition(1);
+            ports.outtakePitchR.setPosition(0);
+            ports.outtakePitchL.setPosition(1);
+            Driver.driveSlides(this, ports, 0.2, 85, 165, lsv_lController, lsv_rController, 500);
+            ports.specimenClaw.setPosition(0);
+            Driver.drive(this, ports, 0.75, 20, 235);
+            ports.outtakePitchR.setPosition(1);
+            ports.outtakePitchL.setPosition(0);
+            Driver.driveSlides(this, ports, 1, 20, 0, lsv_lController, lsv_rController, 150);
+            Driver.rotate(this, ports, 0.75, 195);
+            Driver.drive(this, ports, 1, 150, 90);
+            Driver.drive(this, ports, 1, 40, 180);
+            sleep(1000);
+            Driver.drive(this, ports, 1, 25, 180);
+            ports.specimenClaw.setPosition(1);
+            Driver.driveSlides(this, ports, 1, 145, 290, lsv_lController, lsv_rController, 500);
+            ports.outtakePitchR.setPosition(0);
+            ports.outtakePitchL.setPosition(1);
+            Driver.rotate(this, ports, 1, 155);
+            Driver.drive(this, ports, 1, 90, 150);
+            ports.specimenClaw.setPosition(0);
+            Driver.driveSlides(this, ports, 1, 170, 310, lsv_lController, lsv_rController, 2000);
+        } else {
+
+        }
     }
 }
