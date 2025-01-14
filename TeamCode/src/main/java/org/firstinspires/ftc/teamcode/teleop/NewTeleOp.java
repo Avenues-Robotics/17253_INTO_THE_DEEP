@@ -122,7 +122,8 @@ public class NewTeleOp extends LinearOpMode {
             if(vSlideState == "MANUAL"){
                 double vertical = -currGamepad2.left_stick_y;
 
-                if(ports.lsv_r.getCurrentPosition() < 4330 && ports.lsv_l.getCurrentPosition() < 4330 || vertical < 0) {
+                //if(ports.lsv_r.getCurrentPosition() < 4330 && ports.lsv_l.getCurrentPosition() < 4330 || vertical < 0) {
+                if(ports.lsv_l.getCurrentPosition() < 4330 || vertical < 0) {
                     lsv_lPower = vertical + 0.06;
                     lsv_rPower = vertical + 0.06;
                 } else {
@@ -131,10 +132,12 @@ public class NewTeleOp extends LinearOpMode {
                 }
             } else if(vSlideState == "HIGH CHAMBER"){
                 lsv_lPower = lsv_lController.evaluate(1230 - ports.lsv_l.getCurrentPosition());
-                lsv_rPower = lsv_rController.evaluate(1230 - ports.lsv_r.getCurrentPosition());
+                //lsv_rPower = lsv_rController.evaluate(1230 - ports.lsv_r.getCurrentPosition());
+                lsv_rPower = lsv_rController.evaluate(1230 - ports.lsv_l.getCurrentPosition());
             } else if(vSlideState == "HIGH BASKET"){
                 lsv_lPower = lsv_lController.evaluate(3500 - ports.lsv_l.getCurrentPosition());
-                lsv_rPower = lsv_rController.evaluate(3500 - ports.lsv_r.getCurrentPosition());
+                //lsv_rPower = lsv_rController.evaluate(3500 - ports.lsv_r.getCurrentPosition());
+                lsv_rPower = lsv_rController.evaluate(3500 - ports.lsv_l.getCurrentPosition());
             }
 
             // SET POWER
