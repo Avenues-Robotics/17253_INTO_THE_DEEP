@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.hardware;
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import static java.lang.Thread.sleep;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.classes.PIDController;
 
@@ -32,6 +34,7 @@ import org.firstinspires.ftc.teamcode.classes.PIDController;
  */
 
 public class Driver {
+
     //drive function, input speed, distance in cm, and degree angle of the movement
     public static void drive(LinearOpMode opMode, Ports ports, double speed, double cm, double degrees) {
 
@@ -153,11 +156,11 @@ public class Driver {
 
         // Run while the motors are moving
         while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 30 ||
-                Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 30
+                Math.abs(ports.fl.getTargetPosition()-ports.fl.getCurrentPosition()) >= 30
          ) {
 
             slideOne.getSlide().setPower(slideOne.evaluate(target - slideOne.getSlide().getCurrentPosition()));
-            slideTwo.getSlide().setPower(slideOne.evaluate(target - slideOne.getSlide().getCurrentPosition()));
+            slideTwo.getSlide().setPower(slideTwo.evaluate(target - slideOne.getSlide().getCurrentPosition()));
 
             // Update the telem data
             opMode.telemetry.addData("Running to", "Font Right and Back Left: " + frblTicks + " | Front Left and Back Right: " + flbrTicks);
@@ -397,6 +400,34 @@ public class Driver {
         else {
             ports.lsv_r.setPower(0);
             ports.lsv_l.setPower(0);
+        }
+    }
+
+    public static void Transfer(LinearOpMode opMode, Ports ports, PIDController lsv_l, PIDController lsv_r, PIDController lsh_l, PIDController lsh_r) {
+        ElapsedTime elapsedTime = new ElapsedTime();
+        ports.intakePitch.setPosition(0.3);
+        ports.outtakeClaw.setPosition(0);
+        lsv_l.setup(lsv_l.getSlide().getCurrentPosition());
+        lsv_r.setup(lsv_l.getSlide().getCurrentPosition());
+        while(lsv_l.getSlide().getCurrentPosition() < 10) {
+            lsv_l.getSlide().setPower(lsv_l.evaluate(lsv_l.getSlide().getCurrentPosition()));
+            lsv_r.getSlide().setPower(lsv_r.evaluate(lsv_l.getSlide().getCurrentPosition()));
+        }
+        lsh_l.setup(lsh_l.getSlide().getCurrentPosition()-15);
+        lsh_r.setup(lsh_r.getSlide().getCurrentPosition()-15);
+        while(Math.abs(lsh_l.getSlide().getCurrentPosition()-15) < 10 || Math.abs(lsh_r.getSlide().getCurrentPosition()-15) < 10) {
+            lsh_l.getSlide().setPower(lsh_l.evaluate(lsh_l.getSlide().getCurrentPosition()-15));
+            lsh_r.getSlide().setPower(lsh_r.evaluate(lsh_r.getSlide().getCurrentPosition()-15));
+        }
+        ports.outtakeClaw.setPosition(1);
+        elapsedTime.reset();
+        while (elapsedTime.seconds() < 0.3) {}
+        ports.intakeClaw.setPosition(0.1);
+        lsh_l.setup(lsh_l.getSlide().getCurrentPosition()-100);
+        lsh_r.setup(lsh_r.getSlide().getCurrentPosition()-100);
+        while(Math.abs(lsh_l.getSlide().getCurrentPosition()-100) < 10 || Math.abs(lsh_r.getSlide().getCurrentPosition()-100) < 10) {
+            lsh_l.getSlide().setPower(lsh_l.evaluate(lsh_l.getSlide().getCurrentPosition()-100));
+            lsh_r.getSlide().setPower(lsh_r.evaluate(lsh_r.getSlide().getCurrentPosition()-100));
         }
     }
 }

@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.hardware.Ports;
@@ -17,8 +18,6 @@ public class Testing extends LinearOpMode {
     Ports ports;
     Ports.Builder portsBuilder;
 
-    public static double grip;
-
     @Override
     public void runOpMode() {
 
@@ -28,8 +27,17 @@ public class Testing extends LinearOpMode {
         portsBuilder.allActive = true;
         ports = new Ports(this, portsBuilder);
 
+        ports.lsv_l.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ports.lsv_r.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         waitForStart();
 
-        ports.specimenClaw.setPosition(grip);
+        ports.lsv_l.setPower(0.251897438);
+        ports.lsv_r.setPower(0.251897438);
+        while(opModeIsActive()) {
+            dashboardTelemetry.addData("left", ports.lsv_l.getCurrentPosition());
+            dashboardTelemetry.addData("right", ports.lsv_r.getCurrentPosition());
+            dashboardTelemetry.update();
+        }
     }
 }
