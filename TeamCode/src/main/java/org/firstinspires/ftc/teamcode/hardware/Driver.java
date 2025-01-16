@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.classes.PIDController;
 
 /*
@@ -405,29 +406,42 @@ public class Driver {
 
     public static void Transfer(LinearOpMode opMode, Ports ports, PIDController lsv_l, PIDController lsv_r, PIDController lsh_l, PIDController lsh_r) {
         ElapsedTime elapsedTime = new ElapsedTime();
-        ports.intakePitch.setPosition(0.3);
-        ports.outtakeClaw.setPosition(0);
+        ports.intakePitch.setPosition(0.4);
+        ports.outtakeClaw.setPosition(0.25);
+
         lsv_l.setup(lsv_l.getSlide().getCurrentPosition());
         lsv_r.setup(lsv_l.getSlide().getCurrentPosition());
-        while(lsv_l.getSlide().getCurrentPosition() < 10) {
-            lsv_l.getSlide().setPower(lsv_l.evaluate(lsv_l.getSlide().getCurrentPosition()));
-            lsv_r.getSlide().setPower(lsv_r.evaluate(lsv_l.getSlide().getCurrentPosition()));
+        while(lsv_l.getSlide().getCurrentPosition() > 10) {
+            lsv_l.getSlide().setPower(lsv_l.evaluate(90-lsv_l.getSlide().getCurrentPosition())); // error: between 0 and current pos
+            lsv_r.getSlide().setPower(lsv_r.evaluate(90-lsv_l.getSlide().getCurrentPosition()));
+
+            ports.fr.setPower(0);
+            ports.br.setPower(0);
+            ports.fl.setPower(0);
+            ports.bl.setPower(0);
         }
-        lsh_l.setup(lsh_l.getSlide().getCurrentPosition()-15);
-        lsh_r.setup(lsh_r.getSlide().getCurrentPosition()-15);
-        while(Math.abs(lsh_l.getSlide().getCurrentPosition()-15) < 10 || Math.abs(lsh_r.getSlide().getCurrentPosition()-15) < 10) {
-            lsh_l.getSlide().setPower(lsh_l.evaluate(lsh_l.getSlide().getCurrentPosition()-15));
-            lsh_r.getSlide().setPower(lsh_r.evaluate(lsh_r.getSlide().getCurrentPosition()-15));
+
+
+        lsh_l.setup(45-lsh_l.getSlide().getCurrentPosition());
+        lsh_r.setup(45-lsh_r.getSlide().getCurrentPosition());
+
+        while(Math.abs(lsh_l.getSlide().getCurrentPosition()-45) > 10 || Math.abs(lsh_r.getSlide().getCurrentPosition()-45) > 10) {
+            lsh_l.getSlide().setPower(lsh_l.evaluate(45-lsh_l.getSlide().getCurrentPosition()));
+            lsh_r.getSlide().setPower(lsh_r.evaluate(45-lsh_r.getSlide().getCurrentPosition()));
         }
-        ports.outtakeClaw.setPosition(1);
+
+        ports.outtakeClaw.setPosition(0.25);
+
         elapsedTime.reset();
         while (elapsedTime.seconds() < 0.3) {}
         ports.intakeClaw.setPosition(0.1);
-        lsh_l.setup(lsh_l.getSlide().getCurrentPosition()-100);
-        lsh_r.setup(lsh_r.getSlide().getCurrentPosition()-100);
-        while(Math.abs(lsh_l.getSlide().getCurrentPosition()-100) < 10 || Math.abs(lsh_r.getSlide().getCurrentPosition()-100) < 10) {
-            lsh_l.getSlide().setPower(lsh_l.evaluate(lsh_l.getSlide().getCurrentPosition()-100));
-            lsh_r.getSlide().setPower(lsh_r.evaluate(lsh_r.getSlide().getCurrentPosition()-100));
+
+
+        lsh_l.setup(200-lsh_l.getSlide().getCurrentPosition());
+        lsh_r.setup(200-lsh_r.getSlide().getCurrentPosition());
+        while(Math.abs(lsh_l.getSlide().getCurrentPosition()-200) < 10 || Math.abs(lsh_r.getSlide().getCurrentPosition()-200) < 10) {
+            lsh_l.getSlide().setPower(lsh_l.evaluate(200-lsh_l.getSlide().getCurrentPosition()));
+            lsh_r.getSlide().setPower(lsh_r.evaluate(200-lsh_r.getSlide().getCurrentPosition()));
         }
     }
 }

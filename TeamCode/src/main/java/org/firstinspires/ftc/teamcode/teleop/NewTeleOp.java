@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.classes.Localization;
 import org.firstinspires.ftc.teamcode.classes.PIDController;
+import org.firstinspires.ftc.teamcode.hardware.Driver;
 import org.firstinspires.ftc.teamcode.hardware.Ports;
 import org.firstinspires.ftc.teamcode.hardware.Telem;
 
@@ -39,6 +40,9 @@ public class NewTeleOp extends LinearOpMode {
 
     PIDController lsv_lController;
     PIDController lsv_rController;
+
+    PIDController lsh_lController;
+    PIDController lsh_rController;
 
     Localization localizer;
 
@@ -87,6 +91,9 @@ public class NewTeleOp extends LinearOpMode {
         lsv_lController = new PIDController(0.0127, 0.0004, 0.000001, 0.06, 20, ports.lsv_l);
         lsv_rController = new PIDController(0.0127, 0.0004, 0.000001, 0.06, 20, ports.lsv_r);
 
+        lsh_lController = new PIDController(0.0127, 0.0004, 0.000001, 0, 20, ports.lsh_l);
+        lsh_rController = new PIDController(0.0127, 0.0004, 0.000001, 0, 20, ports.lsh_r);
+
         prevGamepad1 = new Gamepad();
         prevGamepad2 = new Gamepad();
         currGamepad1 = new Gamepad();
@@ -120,10 +127,10 @@ public class NewTeleOp extends LinearOpMode {
 
             // USE STATE TO CALCULATE POWER
             if(vSlideState == "MANUAL"){
-                double vertical = currGamepad2.left_stick_y;
+                double vertical = -currGamepad2.left_stick_y;
 
                 //if(ports.lsv_r.getCurrentPosition() < 4330 && ports.lsv_l.getCurrentPosition() < 4330 || vertical < 0) {
-                if(ports.lsv_l.getCurrentPosition() < 4330) {
+                if(ports.lsv_l.getCurrentPosition() < 4330 || vertical < 0) {
                     lsv_lPower = vertical + 0.06;
                     lsv_rPower = vertical + 0.06;
                 } else {
@@ -220,10 +227,10 @@ public class NewTeleOp extends LinearOpMode {
             // rotates intake claw up and down
             if(currGamepad2.a && !prevGamepad2.a){
                 if(intakeInverse){
-                    ports.intakePitch.setPosition(0.3);
+                    ports.intakePitch.setPosition(0.5);
                     intakeInverse = false;
                 } else {
-                    ports.intakePitch.setPosition(0);
+                    ports.intakePitch.setPosition(0.1);
                 }
             }
 
@@ -246,6 +253,11 @@ public class NewTeleOp extends LinearOpMode {
 
             // **** AUTOMATED HANDOFF ****
 
+            if(currGamepad1.dpad_up && !prevGamepad1.dpad_up){
+                Driver.Transfer(this, ports, lsv_lController, lsv_rController, lsh_lController, lsh_rController);
+            }
+
+
 
              /*
              * 1. intakeClaw -> 0.05 & outtakeClaw -> 0.15 & intakePitch -> 0.4 & outtakePitch -> 0 & horizontalSlides -> 1700 if horizontalSlides < 1700 & verticalSlides -> 0
@@ -255,30 +267,30 @@ public class NewTeleOp extends LinearOpMode {
              */
 
 
-            if(currGamepad1.dpad_up && !prevGamepad1.dpad_up) {
-                handoffStep = 1;
-                // Why negative? -SC
-                lsv_lController.setup(ports.lsv_l.getCurrentPosition());
-                lsv_rController.setup(ports.lsv_r.getCurrentPosition());
-            }
-            if(handoffStep == 1){
-                // set claw to closed
-                ports.intakeClaw.setPosition(0.85);
-                // set intake claw open
-                ports.outtakeClaw.setPosition(0.25);
-                telemetry.addLine("set intake claw closed, set outtake claw open");
-                telemetry.update();
-                // I would avoid sleep() in teleop.  You have a loop running
-                // and you are interrupting that loop.  Use a timer and a while
-                // loop instead.  THen use state variables like handoffStep to control
-                // what can run or can't run while you are waiting.
-                // bring intake claw up and over
-                ports.intakePitch.setPosition(0.3);
-                // bring outtake claw up and over
-                ports.outtakePitchL.setPosition(0);
-                ports.outtakePitchR.setPosition(1);
-                telemetry.addLine("set intake claw up and over, set outtake claw up and over");
-                telemetry.update();
+//            if(currGamepad1.dpad_up && !prevGamepad1.dpad_up) {
+//                handoffStep = 1;
+//                // Why negative? -SC
+//                lsv_lController.setup(ports.lsv_l.getCurrentPosition());
+//                lsv_rController.setup(ports.lsv_r.getCurrentPosition());
+//            }
+//            if(handoffStep == 1){
+//                // set claw to closed
+//                ports.intakeClaw.setPosition(0.85);
+//                // set intake claw open
+//                ports.outtakeClaw.setPosition(0.25);
+//                telemetry.addLine("set intake claw closed, set outtake claw open");
+//                telemetry.update();
+//                // I would avoid sleep() in teleop.  You have a loop running
+//                // and you are interrupting that loop.  Use a timer and a while
+//                // loop instead.  THen use state variables like handoffStep to control
+//                // what can run or can't run while you are waiting.
+//                // bring intake claw up and over
+//                ports.intakePitch.setPosition(0.3);
+//                // bring outtake claw up and over
+//                ports.outtakePitchL.setPosition(0);
+//                ports.outtakePitchR.setPosition(1);
+//                telemetry.addLine("set intake claw up and over, set outtake claw up and over");
+//                telemetry.update();
                 // bring slides out enough so that the incoming claw doesn't bash them
 //                if(ports.lsh_l.getCurrentPosition() < 1700 || ports.lsh_r.getCurrentPosition() < 1700){
 //                    ports.lsh_r.setPower(1);
@@ -295,7 +307,7 @@ public class NewTeleOp extends LinearOpMode {
 //                    handoffStep = 2;
 //                    telemetry.addLine("here now 1!");
                 //}
-            }
+//            }
 //            if(handoffStep == 2){
 //                telemetry.addLine("here now 2!");
 //                // slightly widen intake claw so it's ready to hand the specimen off to the outtake claw
