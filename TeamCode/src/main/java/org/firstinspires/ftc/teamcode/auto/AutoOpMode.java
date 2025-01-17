@@ -89,7 +89,7 @@ public class AutoOpMode extends LinearOpMode {
             Driver.rotate(this, ports, 1, 155);
             Driver.drive(this, ports, 1, 90, 150);
             ports.specimenClaw.setPosition(0);
-            Driver.driveSlides(this, ports, 1, 170, 310, lsv_lController, lsv_rController, 200);
+            Driver.driveSlides(this, ports, 1, 50, 310, lsv_lController, lsv_rController, 200);
         } else {
             sleep(waitTime);
             ports.outtakeClaw.setPosition(1);
