@@ -30,26 +30,29 @@ public class AutoOpMode extends LinearOpMode {
 
     PIDController lsv_lController;
     PIDController lsv_rController;
+    PIDController lsh_lController;
+    PIDController lsh_rController;
 
     public static boolean isSpecimen;
     public static int waitTime;
 
-    public static double speed1;
-    public static double dist1;
-    public static double deg1;
-    public static int target1;
+    public static double speed1 = 0.15;
+    public static double dist1 = 50;
+    public static double deg1 = 235;
+    public static int target1 = 3650;
 
-    public static double speed2;
-    public static double dist2;
-    public static double deg2;
+    public static double speed2 = 0.15;
+    public static double dist2 = 30;
+    public static double deg2 = 0;
+    public static int target2 = 0;
 
-    public static double speed3;
-    public static double dist3;
-    public static double deg3;
+    public static double speed3 = 1;
+    public static double dist3 = 50;
+    public static double deg3 = 180;
     public static int target3;
 
-    public static double speed4;
-    public static double deg4;
+    public static double speed4 = 1;
+    public static double deg4 = -45;
 
     //Create the opmode function
     @Override
@@ -61,6 +64,8 @@ public class AutoOpMode extends LinearOpMode {
         dashboardTelemetry = FtcDashboard.getInstance().getTelemetry();
         lsv_lController = new PIDController(0.0127, 0.0004, 0.000001, 0.06, 20, ports.lsv_l);
         lsv_rController = new PIDController(0.0127, 0.0004, 0.000001, 0.06, 20, ports.lsv_r);
+        lsh_lController = new PIDController(0.0127, 0.0004, 0.000001, 0, 20, ports.lsh_l);
+        lsh_rController = new PIDController(0.0127, 0.0004, 0.000001, 0, 20, ports.lsh_r);
 
         //wait for the game to start
         waitForStart();
@@ -75,7 +80,7 @@ public class AutoOpMode extends LinearOpMode {
             Driver.drive(this, ports, 0.75, 20, 235);
             ports.outtakePitchR.setPosition(1);
             ports.outtakePitchL.setPosition(0);
-            Driver.driveSlides(this, ports, 1, 20, 0, lsv_lController, lsv_rController, 150);
+            Driver.driveSlides(this, ports, 0.2, 20, 0, lsv_lController, lsv_rController, 300);
             Driver.rotate(this, ports, 0.75, 195);
             Driver.drive(this, ports, 1, 150, 90);
             Driver.drive(this, ports, 1, 40, 180);
@@ -89,20 +94,22 @@ public class AutoOpMode extends LinearOpMode {
             Driver.rotate(this, ports, 1, 155);
             Driver.drive(this, ports, 1, 90, 150);
             ports.specimenClaw.setPosition(0);
-            Driver.driveSlides(this, ports, 1, 50, 310, lsv_lController, lsv_rController, 200);
+            Driver.driveSlides(this, ports, 1, 130, 310, lsv_lController, lsv_rController, 0);
+            ports.intakePitch.setPosition(0.4);
+            Driver.driveSlides(this, ports, 0.15, 75, 270, lsh_lController, lsh_rController, -30);
+
         } else {
             sleep(waitTime);
             ports.outtakeClaw.setPosition(1);
             ports.outtakePitchR.setPosition(0);
             ports.outtakePitchL.setPosition(1);
             Driver.driveSlides(this, ports, speed1, dist1, deg1, lsv_lController, lsv_rController, target1);
-            Driver.drive(this, ports, speed2, dist2, deg2);
             ports.outtakeClaw.setPosition(0);
-            sleep(750);
             ports.outtakePitchR.setPosition(1);
             ports.outtakePitchL.setPosition(0);
-            Driver.driveSlides(this, ports, speed3, dist3, deg3, lsv_lController, lsv_rController, target3);
+            Driver.driveSlides(this, ports, speed2, dist2, deg2, lsv_lController, lsv_rController, target2);
             Driver.rotate(this, ports, speed4, deg4);
+            Driver.drive(this, ports, speed3, dist3, deg3);
         }
     }
 }

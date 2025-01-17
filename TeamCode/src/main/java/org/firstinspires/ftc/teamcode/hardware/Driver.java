@@ -164,6 +164,7 @@ public class Driver {
             slideTwo.getSlide().setPower(slideTwo.evaluate(target - slideOne.getSlide().getCurrentPosition()));
 
             // Update the telem data
+            opMode.telemetry.addData("Slide positions", slideOne.getSlide().getCurrentPosition());
             opMode.telemetry.addData("Running to", "Font Right and Back Left: " + frblTicks + " | Front Left and Back Right: " + flbrTicks);
             opMode.telemetry.addData("Current pos", "Front Right: " + ports.fr.getCurrentPosition() + " | Front Left: " + ports.fl.getCurrentPosition() + " | Back Right: " + ports.br.getCurrentPosition() + " | Back Left: " + ports.bl.getCurrentPosition());
             Telem.update(opMode);
@@ -408,44 +409,39 @@ public class Driver {
         ElapsedTime elapsedTime = new ElapsedTime();
         ports.intakePitch.setPosition(0.4);
         ports.outtakeClaw.setPosition(0);
-        opMode.telemetry.addLine("outtake open???");
-        opMode.telemetry.update();
-        while(opMode.opModeIsActive()){
+        lsv_l.setup(-lsv_l.getSlide().getCurrentPosition());
+        lsv_r.setup(-lsv_l.getSlide().getCurrentPosition());
+        while(lsv_l.getSlide().getCurrentPosition() > 10) {
+            lsv_l.getSlide().setPower(lsv_l.evaluate(-lsv_l.getSlide().getCurrentPosition())); // error: between 0 and current pos
+            lsv_r.getSlide().setPower(lsv_r.evaluate(-lsv_l.getSlide().getCurrentPosition()));
 
+            ports.fr.setPower(0);
+            ports.br.setPower(0);
+            ports.fl.setPower(0);
+            ports.bl.setPower(0);
         }
-//        lsv_l.setup(-lsv_l.getSlide().getCurrentPosition());
-//        lsv_r.setup(-lsv_l.getSlide().getCurrentPosition());
-//        while(lsv_l.getSlide().getCurrentPosition() > 10) {
-//            lsv_l.getSlide().setPower(lsv_l.evaluate(-lsv_l.getSlide().getCurrentPosition())); // error: between 0 and current pos
-//            lsv_r.getSlide().setPower(lsv_r.evaluate(-lsv_l.getSlide().getCurrentPosition()));
-//
-//            ports.fr.setPower(0);
-//            ports.br.setPower(0);
-//            ports.fl.setPower(0);
-//            ports.bl.setPower(0);
-//        }
-//
-//
-//        lsh_l.setup(60-lsh_l.getSlide().getCurrentPosition());
-//        lsh_r.setup(60-lsh_r.getSlide().getCurrentPosition());
-//
-//        while(Math.abs(lsh_l.getSlide().getCurrentPosition()-60) > 10 || Math.abs(lsh_r.getSlide().getCurrentPosition()-60) > 10) {
-//            lsh_l.getSlide().setPower(lsh_l.evaluate(60-lsh_l.getSlide().getCurrentPosition()));
-//            lsh_r.getSlide().setPower(lsh_r.evaluate(60-lsh_r.getSlide().getCurrentPosition()));
-//        }
-//
-//        ports.outtakeClaw.setPosition(1);
-//
-//        elapsedTime.reset();
-//        while (elapsedTime.seconds() < 0.3) {}
-//        ports.intakeClaw.setPosition(0.1);
-//
-//
-//        lsh_l.setup(200-lsh_l.getSlide().getCurrentPosition());
-//        lsh_r.setup(200-lsh_r.getSlide().getCurrentPosition());
-//        while(Math.abs(lsh_l.getSlide().getCurrentPosition()-200) < 10 || Math.abs(lsh_r.getSlide().getCurrentPosition()-200) < 10) {
-//            lsh_l.getSlide().setPower(lsh_l.evaluate(200-lsh_l.getSlide().getCurrentPosition()));
-//            lsh_r.getSlide().setPower(lsh_r.evaluate(200-lsh_r.getSlide().getCurrentPosition()));
-//        }
+
+
+        lsh_l.setup(60-lsh_l.getSlide().getCurrentPosition());
+        lsh_r.setup(60-lsh_r.getSlide().getCurrentPosition());
+
+        while(Math.abs(lsh_l.getSlide().getCurrentPosition()-60) > 10 || Math.abs(lsh_r.getSlide().getCurrentPosition()-60) > 10) {
+            lsh_l.getSlide().setPower(lsh_l.evaluate(60-lsh_l.getSlide().getCurrentPosition()));
+            lsh_r.getSlide().setPower(lsh_r.evaluate(60-lsh_r.getSlide().getCurrentPosition()));
+        }
+
+        ports.outtakeClaw.setPosition(1);
+
+        elapsedTime.reset();
+        while (elapsedTime.seconds() < 0.3) {}
+        ports.intakeClaw.setPosition(0.1);
+
+
+        lsh_l.setup(200-lsh_l.getSlide().getCurrentPosition());
+        lsh_r.setup(200-lsh_r.getSlide().getCurrentPosition());
+        while(Math.abs(lsh_l.getSlide().getCurrentPosition()-200) < 10 || Math.abs(lsh_r.getSlide().getCurrentPosition()-200) < 10) {
+            lsh_l.getSlide().setPower(lsh_l.evaluate(200-lsh_l.getSlide().getCurrentPosition()));
+            lsh_r.getSlide().setPower(lsh_r.evaluate(200-lsh_r.getSlide().getCurrentPosition()));
+        }
     }
 }
