@@ -244,10 +244,10 @@ public class NewTeleOp extends LinearOpMode {
             }
 
             // specimen claw open and close
-            if(currGamepad1.dpad_right && !prevGamepad1.dpad_right){
+            if(currGamepad2.right_bumper && !prevGamepad2.right_bumper){
                 ports.specimenClaw.setPosition(0.8);
             }
-            if(currGamepad1.dpad_left && !prevGamepad1.dpad_left){
+            if(currGamepad2.left_bumper && !prevGamepad2.left_bumper){
                 ports.specimenClaw.setPosition(0);
             }
 
