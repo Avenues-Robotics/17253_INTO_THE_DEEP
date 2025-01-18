@@ -161,8 +161,8 @@ public class NewTeleOp extends LinearOpMode {
                 ports.lsh_r.setPower(horizontal);
                 ports.lsh_l.setPower(horizontal);
             } else {
-                ports.lsh_r.setPower(0);
-                ports.lsh_l.setPower(0);
+                ports.lsh_r.setPower(-Math.abs(horizontal));
+                ports.lsh_l.setPower(-Math.abs(horizontal));
             }
 
             // X = SQUARE
@@ -301,11 +301,10 @@ public class NewTeleOp extends LinearOpMode {
 
             if(handoffStep == 6) {
                 ports.outtakeClaw.setPosition(1);
-                handoffElapsedTime.reset();
                 handoffStep = 7;
             }
 
-            if(handoffStep == 7 && handoffElapsedTime.seconds() >= 0.3) {
+            if(handoffStep == 7) {
                 ports.intakeClaw.setPosition(1);
                 handoffStep = 8;
             }
