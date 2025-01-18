@@ -99,6 +99,8 @@ public class NewTeleOp extends LinearOpMode {
         currGamepad1 = new Gamepad();
         currGamepad2 = new Gamepad();
 
+        ElapsedTime handoffElapsedTime = new ElapsedTime();
+
         localizer = new Localization(this, ports, new Pose3D(startingPosition, startingRotation));
 
         waitForStart();
@@ -254,9 +256,74 @@ public class NewTeleOp extends LinearOpMode {
             // **** AUTOMATED HANDOFF ****
 
             if(currGamepad1.dpad_up && !prevGamepad1.dpad_up){
-                Driver.Transfer(this, ports, lsv_lController, lsv_rController, lsh_lController, lsh_rController);
+                handoffStep = 1;
             }
 
+
+
+            //Handoff Try 2
+            if(handoffStep == 1) {
+                ports.fr.setPower(0);
+                ports.br.setPower(0);
+                ports.fl.setPower(0);
+                ports.bl.setPower(0);
+
+                ports.intakePitch.setPosition(0.4);
+                ports.outtakeClaw.setPosition(0);
+                lsv_lController.setup(-ports.lsv_l.getCurrentPosition());
+                lsv_rController.setup(-ports.lsv_l.getCurrentPosition());
+                handoffStep = 2;
+            }
+
+            if(handoffStep == 2) {
+                ports.lsv_l.setPower(lsv_lController.evaluate(-ports.lsv_l.getCurrentPosition())); // error: between 0 and current pos
+                ports.lsv_r.setPower(lsv_rController.evaluate(-ports.lsv_l.getCurrentPosition()));
+
+                if(ports.lsv_l.getCurrentPosition() < 10) {
+                    handoffStep = 3;
+                }
+            }
+
+            if(handoffStep == 3) {
+                lsh_lController.setup(60-ports.lsh_l.getCurrentPosition());
+                lsh_rController.setup(60-ports.lsh_r.getCurrentPosition());
+                handoffStep = 4;
+            }
+
+            if(handoffStep == 4) {
+                ports.lsh_l.setPower(lsh_lController.evaluate(60-ports.lsh_l.getCurrentPosition()));
+                ports.lsh_r.setPower(lsh_rController.evaluate(60-ports.lsh_r.getCurrentPosition()));
+
+                if(!(Math.abs(ports.lsh_l.getCurrentPosition()-60) > 10 || Math.abs(ports.lsh_r.getCurrentPosition()-60) > 10)){
+                    handoffStep = 5;
+                }
+            }
+
+            if(handoffStep == 6) {
+                ports.outtakeClaw.setPosition(1);
+                handoffElapsedTime.reset();
+                handoffStep = 7;
+            }
+
+            if(handoffStep == 7 && handoffElapsedTime.seconds() >= 0.3) {
+                ports.intakeClaw.setPosition(0.1);
+                handoffStep = 8;
+            }
+
+            if(handoffStep == 8) {
+                lsh_lController.setup(200-ports.lsh_l.getCurrentPosition());
+                lsh_rController.setup(200-ports.lsh_r.getCurrentPosition());
+                handoffStep = 9;
+            }
+
+            if(handoffStep == 9) {
+                ports.lsh_l.setPower(lsh_lController.evaluate(200-ports.lsh_l.getCurrentPosition()));
+                ports.lsh_r.setPower(lsh_rController.evaluate(200-ports.lsh_r.getCurrentPosition()));
+
+                if(!(Math.abs(ports.lsh_l.getCurrentPosition()-200) < 10 || Math.abs(ports.lsh_r.getCurrentPosition()-200) < 10)){
+                    handoffStep = 0;
+                }
+            }
 
 
              /*
