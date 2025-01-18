@@ -54,7 +54,6 @@ public class NewTeleOp extends LinearOpMode {
     double max;
     double tolerance = 30;
 
-
     // STATE MACHINE VARIABLES
     private String vSlideState = "MANUAL";
     private double lsv_lPower= 0;
@@ -98,6 +97,7 @@ public class NewTeleOp extends LinearOpMode {
         prevGamepad2 = new Gamepad();
         currGamepad1 = new Gamepad();
         currGamepad2 = new Gamepad();
+
 
         ElapsedTime handoffElapsedTime = new ElapsedTime();
 
@@ -285,16 +285,16 @@ public class NewTeleOp extends LinearOpMode {
             }
 
             if(handoffStep == 3) {
-                lsh_lController.setup(60-ports.lsh_l.getCurrentPosition());
-                lsh_rController.setup(60-ports.lsh_r.getCurrentPosition());
+                lsh_lController.setup(100-ports.lsh_l.getCurrentPosition());
+                lsh_rController.setup(100-ports.lsh_r.getCurrentPosition());
                 handoffStep = 4;
             }
 
             if(handoffStep == 4) {
-                ports.lsh_l.setPower(lsh_lController.evaluate(60-ports.lsh_l.getCurrentPosition()));
-                ports.lsh_r.setPower(lsh_rController.evaluate(60-ports.lsh_r.getCurrentPosition()));
+                ports.lsh_l.setPower(lsh_lController.evaluate(100-ports.lsh_l.getCurrentPosition()));
+                ports.lsh_r.setPower(lsh_rController.evaluate(100-ports.lsh_r.getCurrentPosition()));
 
-                if(!(Math.abs(ports.lsh_l.getCurrentPosition()-60) > 10 || Math.abs(ports.lsh_r.getCurrentPosition()-60) > 10)){
+                if(!(Math.abs(ports.lsh_l.getCurrentPosition()-100) > 10 || Math.abs(ports.lsh_r.getCurrentPosition()-100) > 10)){
                     handoffStep = 5;
                 }
             }
@@ -306,21 +306,21 @@ public class NewTeleOp extends LinearOpMode {
             }
 
             if(handoffStep == 7 && handoffElapsedTime.seconds() >= 0.3) {
-                ports.intakeClaw.setPosition(0.1);
+                ports.intakeClaw.setPosition(1);
                 handoffStep = 8;
             }
 
             if(handoffStep == 8) {
-                lsh_lController.setup(200-ports.lsh_l.getCurrentPosition());
-                lsh_rController.setup(200-ports.lsh_r.getCurrentPosition());
+                lsh_lController.setup(250-ports.lsh_l.getCurrentPosition());
+                lsh_rController.setup(250-ports.lsh_r.getCurrentPosition());
                 handoffStep = 9;
             }
 
             if(handoffStep == 9) {
-                ports.lsh_l.setPower(lsh_lController.evaluate(200-ports.lsh_l.getCurrentPosition()));
-                ports.lsh_r.setPower(lsh_rController.evaluate(200-ports.lsh_r.getCurrentPosition()));
+                ports.lsh_l.setPower(lsh_lController.evaluate(250-ports.lsh_l.getCurrentPosition()));
+                ports.lsh_r.setPower(lsh_rController.evaluate(250-ports.lsh_r.getCurrentPosition()));
 
-                if(!(Math.abs(ports.lsh_l.getCurrentPosition()-200) < 10 || Math.abs(ports.lsh_r.getCurrentPosition()-200) < 10)){
+                if(!(Math.abs(ports.lsh_l.getCurrentPosition()-250) < 10 || Math.abs(ports.lsh_r.getCurrentPosition()-250) < 10)){
                     handoffStep = 0;
                 }
             }
