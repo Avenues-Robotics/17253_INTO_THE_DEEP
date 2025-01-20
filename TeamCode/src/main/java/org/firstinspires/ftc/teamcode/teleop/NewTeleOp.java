@@ -284,6 +284,7 @@ public class NewTeleOp extends LinearOpMode {
                 }
             }
 
+            // 3 and 4 can be combined
             if(handoffStep == 3) {
                 lsh_lController.setup(100-ports.lsh_l.getCurrentPosition());
                 lsh_rController.setup(100-ports.lsh_r.getCurrentPosition());
@@ -293,17 +294,24 @@ public class NewTeleOp extends LinearOpMode {
             if(handoffStep == 4) {
                 ports.lsh_l.setPower(lsh_lController.evaluate(100-ports.lsh_l.getCurrentPosition()));
                 ports.lsh_r.setPower(lsh_rController.evaluate(100-ports.lsh_r.getCurrentPosition()));
+                // Its a little confusing the at order of your subtraction changes
+                // It doesn't make a difference, but it catches my eye as a possible error.
 
+                // It looks like you are saying to go onto the next step if
+                // one of the slides is MORE than 10 ticks away from 100
+                // is that right?  Shouldn't it move on when the error is less than 10?
                 if(!(Math.abs(ports.lsh_l.getCurrentPosition()-100) > 10 || Math.abs(ports.lsh_r.getCurrentPosition()-100) > 10)){
                     handoffStep = 5;
                 }
             }
-
+            // YOU SKIPPED STEP 5!!!!
             if(handoffStep == 6) {
                 ports.outtakeClaw.setPosition(1);
                 handoffStep = 7;
             }
-
+            // You might want to use a time to add a little
+            // time between closing outtake and opening intake
+            // just to avoid the possibility of dropping.
             if(handoffStep == 7) {
                 ports.intakeClaw.setPosition(1);
                 handoffStep = 8;
