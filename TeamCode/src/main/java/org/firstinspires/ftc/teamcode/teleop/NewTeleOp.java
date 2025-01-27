@@ -229,7 +229,7 @@ public class NewTeleOp extends LinearOpMode {
             // rotates intake claw up and down
             if(currGamepad2.a && !prevGamepad2.a){
                 if(intakeInverse){
-                    ports.intakePitch.setPosition(0.5);
+                    ports.intakePitch.setPosition(0.4);
                     intakeInverse = false;
                 } else {
                     ports.intakePitch.setPosition(0.1);
@@ -270,6 +270,7 @@ public class NewTeleOp extends LinearOpMode {
 
                 ports.intakePitch.setPosition(0.4);
                 ports.outtakeClaw.setPosition(0);
+                ports.intakeClaw.setPosition(0.77);
                 lsv_lController.setup(-ports.lsv_l.getCurrentPosition());
                 lsv_rController.setup(-ports.lsv_l.getCurrentPosition());
                 handoffStep = 2;
@@ -285,16 +286,16 @@ public class NewTeleOp extends LinearOpMode {
             }
 
             if(handoffStep == 3) {
-                lsh_lController.setup(100-ports.lsh_l.getCurrentPosition());
-                lsh_rController.setup(100-ports.lsh_r.getCurrentPosition());
+                lsh_lController.setup(250-ports.lsh_l.getCurrentPosition());
+                lsh_rController.setup(250-ports.lsh_r.getCurrentPosition());
                 handoffStep = 4;
             }
 
             if(handoffStep == 4) {
-                ports.lsh_l.setPower(lsh_lController.evaluate(100-ports.lsh_l.getCurrentPosition()));
-                ports.lsh_r.setPower(lsh_rController.evaluate(100-ports.lsh_r.getCurrentPosition()));
+                ports.lsh_l.setPower(lsh_lController.evaluate(250-ports.lsh_l.getCurrentPosition()));
+                ports.lsh_r.setPower(lsh_rController.evaluate(250-ports.lsh_r.getCurrentPosition()));
 
-                if(!(Math.abs(ports.lsh_l.getCurrentPosition()-100) > 10 || Math.abs(ports.lsh_r.getCurrentPosition()-100) > 10)){
+                if(!(Math.abs(ports.lsh_l.getCurrentPosition()-250) > 10 || Math.abs(ports.lsh_r.getCurrentPosition()-250) > 10)){
                     handoffStep = 5;
                 }
             }

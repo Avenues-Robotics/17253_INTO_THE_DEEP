@@ -18,6 +18,8 @@ public class Testing extends LinearOpMode {
     Ports ports;
     Ports.Builder portsBuilder;
 
+    public static double grip;
+
     @Override
     public void runOpMode() {
 
@@ -27,17 +29,9 @@ public class Testing extends LinearOpMode {
         portsBuilder.allActive = true;
         ports = new Ports(this, portsBuilder);
 
-        ports.lsv_l.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ports.lsv_r.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         waitForStart();
 
-        ports.lsv_l.setPower(0.251897438);
-        ports.lsv_r.setPower(0.251897438);
-        while(opModeIsActive()) {
-            dashboardTelemetry.addData("left", ports.lsv_l.getCurrentPosition());
-            dashboardTelemetry.addData("right", ports.lsv_r.getCurrentPosition());
-            dashboardTelemetry.update();
-        }
+        ports.intakeClaw.setPosition(grip);
+        sleep(100000);
     }
 }
