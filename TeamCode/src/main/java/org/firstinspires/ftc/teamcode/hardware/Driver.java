@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.classes.PIDController;
 
 /*
@@ -444,4 +445,33 @@ public class Driver {
             lsh_r.getSlide().setPower(lsh_r.evaluate(200-lsh_r.getSlide().getCurrentPosition()));
         }
     }
+
+    public static void DriveToPosApril(LinearOpMode opMode, Ports ports, Pose3D currentPose, Pose3D targetPose){
+
+        double drive = 0;
+        double strafe = 0;
+        double yaw = (targetPose.getOrientation().getYaw()-currentPose.getOrientation().getYaw()) * 1.409;
+
+        double fr = drive - strafe - yaw;
+        double fl = drive + strafe + yaw;
+        double br = drive + strafe - yaw;
+        double bl = drive - strafe + yaw;
+
+        // Normalize the values so no wheel power exceeds 100%
+        double max = Math.max(Math.max(Math.max(Math.abs(fl), Math.abs(fr)), Math.abs(bl)), Math.abs(br));
+
+        if (max > 1.0) {
+            fl /= max;
+            fr /= max;
+            bl /= max;
+            br /= max;
+        }
+
+        ports.fl.setPower(fl);
+        ports.fr.setPower(fr);
+        ports.bl.setPower(bl);
+        ports.br.setPower(br);
+
+    }
+
 }
