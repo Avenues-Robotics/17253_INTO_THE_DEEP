@@ -13,7 +13,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.classes.Localization;
 import org.firstinspires.ftc.teamcode.classes.PIDController;
-import org.firstinspires.ftc.teamcode.hardware.Driver;
 import org.firstinspires.ftc.teamcode.hardware.Ports;
 import org.firstinspires.ftc.teamcode.hardware.Telem;
 

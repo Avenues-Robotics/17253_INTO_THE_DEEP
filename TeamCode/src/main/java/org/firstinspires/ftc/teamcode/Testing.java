@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.classes.AprilTagLocalizer;
 import org.firstinspires.ftc.teamcode.hardware.Ports;
 import org.firstinspires.ftc.teamcode.hardware.Driver;
 
@@ -20,18 +21,23 @@ public class Testing extends LinearOpMode {
 
     public static double grip;
 
+    AprilTagLocalizer aprilTagLocalizer;
+
     @Override
     public void runOpMode() {
 
-        dashboardTelemetry = FtcDashboard.getInstance().getTelemetry();
+//        dashboardTelemetry = FtcDashboard.getInstance().getTelemetry();
+//
+//        portsBuilder = new Ports.Builder();
+//        portsBuilder.allActive = true;
+//        ports = new Ports(this, portsBuilder);
 
-        portsBuilder = new Ports.Builder();
-        portsBuilder.allActive = true;
-        ports = new Ports(this, portsBuilder);
+        aprilTagLocalizer = new AprilTagLocalizer(this);
 
         waitForStart();
 
-        ports.intakeClaw.setPosition(grip);
-        sleep(100000);
+        while(opModeIsActive()) {
+            aprilTagLocalizer.run();
+        }
     }
 }

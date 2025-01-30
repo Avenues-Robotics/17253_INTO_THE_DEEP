@@ -42,11 +42,8 @@ public class MecanumLocalizer {
             diffVerti = (currVerti - prevVerti)*elapsedTime.seconds();
 
             Pose3D out = new Pose3D(new Position(DistanceUnit.INCH,
-                    diffVerti,
-                    diffHoriz,
-                    0, elapsedTime.time(TimeUnit.SECONDS)), new YawPitchRollAngles(AngleUnit.DEGREES,
-                    0,
-                    0, 0, elapsedTime.time(TimeUnit.SECONDS)));
+                    diffVerti, diffHoriz,
+                    0, 0), new YawPitchRollAngles(AngleUnit.DEGREES, 0, 0, 0, 0));
 
             elapsedTime.reset();
 

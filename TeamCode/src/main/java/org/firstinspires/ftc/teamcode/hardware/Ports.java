@@ -111,7 +111,7 @@ public class Ports {
              outtakePitchR = opMode.hardwareMap.get(Servo.class, "outtakePitchR");
          }
 
-         if (builder.allActive || builder.wheelsActive || builder.frActive) {
+         if (builder.allActive || builder.servosActive || builder.specimenClawActive) {
              specimenClaw = opMode.hardwareMap.get(Servo.class, "specimenClaw");
          }
      }

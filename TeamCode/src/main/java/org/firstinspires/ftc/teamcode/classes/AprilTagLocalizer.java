@@ -73,8 +73,9 @@ public class AprilTagLocalizer {
             }
             xPos /= sumList.size(); yPos /= sumList.size(); zPos /= sumList.size(); pitch /= sumList.size(); yaw /= sumList.size(); roll /= sumList.size();
         }
-        out = new Pose3D(new Position(DistanceUnit.INCH, xPos, yPos, zPos, timeLastDetection.time(TimeUnit.SECONDS)), new YawPitchRollAngles(AngleUnit.DEGREES, yaw, pitch, roll, timeLastDetection.time(TimeUnit.SECONDS)));
+        out = new Pose3D(new Position(DistanceUnit.INCH, xPos, yPos, zPos, 0), new YawPitchRollAngles(AngleUnit.DEGREES, yaw, pitch, roll, 0));
         dashboardTelemetry.addData("April Tag Estimate", out);
+        dashboardTelemetry.update();
         return out;
     }
 }
