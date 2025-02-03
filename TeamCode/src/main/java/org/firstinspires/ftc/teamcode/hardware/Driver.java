@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -446,11 +447,15 @@ public class Driver {
         }
     }
 
-    public static void DriveToPosApril(LinearOpMode opMode, Ports ports, Pose3D currentPose, Pose3D targetPose){
+    public static void DriveToPosApril(LinearOpMode opMode, Ports ports, Pose3D currentPose, Pose3D targetPose, double angle){
 
-        double drive = 0;
-        double strafe = 0;
-        double yaw = (targetPose.getOrientation().getYaw()-currentPose.getOrientation().getYaw()) * 1.409;
+        double strafe = -targetPose.getPosition().x + currentPose.getPosition().x;
+        double drive = -targetPose.getPosition().y + currentPose.getPosition().y;
+
+        telemetry.addData("Position", currentPose);
+        telemetry.update();
+
+        double yaw = (targetPose.getOrientation().getRoll()-currentPose.getOrientation().getRoll()) * 1.409;
 
         double fr = drive - strafe - yaw;
         double fl = drive + strafe + yaw;
