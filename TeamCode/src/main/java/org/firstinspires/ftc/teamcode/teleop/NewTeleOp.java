@@ -204,11 +204,15 @@ public class NewTeleOp extends LinearOpMode {
             // **** SERVOS ****
             // flip outtake claw from inside to outside robot
             if(currGamepad2.dpad_up){
-                ports.outtakePitchL.setPosition(1);
-                ports.outtakePitchR.setPosition(0);
+                ports.outtakePitchLL.setPosition(0);
+                ports.outtakePitchLR.setPosition(1);
+                ports.outtakePitchRR.setPosition(1);
+                ports.outtakePitchRL.setPosition(0);
             } else if(currGamepad2.dpad_down){
-                ports.outtakePitchL.setPosition(0);
-                ports.outtakePitchR.setPosition(1);
+                ports.outtakePitchLL.setPosition(1);
+                ports.outtakePitchLR.setPosition(0);
+                ports.outtakePitchRR.setPosition(0);
+                ports.outtakePitchRL.setPosition(1);
             }
             // opens and closes outtake claw
             if(currGamepad2.dpad_right){
@@ -228,10 +232,10 @@ public class NewTeleOp extends LinearOpMode {
             // rotates intake claw up and down
             if(currGamepad2.a && !prevGamepad2.a){
                 if(intakeInverse){
-                    ports.intakePitch.setPosition(0.5);
+                    ports.intakePitch.setPosition(0.3);
                     intakeInverse = false;
                 } else {
-                    ports.intakePitch.setPosition(0.1);
+                    ports.intakePitch.setPosition(0);
                 }
             }
 

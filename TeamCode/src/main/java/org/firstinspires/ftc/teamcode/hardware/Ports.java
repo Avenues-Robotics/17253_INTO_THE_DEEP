@@ -38,8 +38,10 @@ public class Ports {
 
     //Outtake Servos
     public Servo outtakeClaw;
-    public Servo outtakePitchL;
-    public Servo outtakePitchR;
+    public Servo outtakePitchRL;
+    public Servo outtakePitchRR;
+    public Servo outtakePitchLL;
+    public Servo outtakePitchLR;
 
 
     //DO INITIALIZATION STEPS HERE
@@ -103,12 +105,20 @@ public class Ports {
              outtakeClaw = opMode.hardwareMap.get(Servo.class, "outtakeClaw");
          }
 
-         if (builder.allActive || builder.servosActive || builder.outtakePitchLActive) {
-             outtakePitchL = opMode.hardwareMap.get(Servo.class, "outtakePitchL");
+         if (builder.allActive || builder.servosActive || builder.outtakePitchRLActive) {
+             outtakePitchRL = opMode.hardwareMap.get(Servo.class, "outtakePitchRL");
          }
 
-         if (builder.allActive || builder.servosActive || builder.outtakePitchRActive) {
-             outtakePitchR = opMode.hardwareMap.get(Servo.class, "outtakePitchR");
+         if (builder.allActive || builder.servosActive || builder.outtakePitchRRActive) {
+             outtakePitchRR = opMode.hardwareMap.get(Servo.class, "outtakePitchRR");
+         }
+
+         if (builder.allActive || builder.servosActive || builder.outtakePitchLLActive) {
+             outtakePitchLL = opMode.hardwareMap.get(Servo.class, "outtakePitchLL");
+         }
+
+         if (builder.allActive || builder.servosActive || builder.outtakePitchLRActive) {
+             outtakePitchLR = opMode.hardwareMap.get(Servo.class, "outtakePitchLR");
          }
 
          if (builder.allActive || builder.servosActive || builder.specimenClawActive) {
@@ -123,8 +133,10 @@ public class Ports {
          public boolean intakePitchActive = false;
          public boolean intakeRollActive = false;
          public boolean outtakeClawActive = false;
-         public boolean outtakePitchLActive = false;
-         public boolean outtakePitchRActive = false;
+         public boolean outtakePitchRLActive = false;
+         public boolean outtakePitchRRActive = false;
+         public boolean outtakePitchLLActive = false;
+         public boolean outtakePitchLRActive = false;
          public boolean specimenClawActive = false;
          public boolean allActive = false;
          public boolean frActive = false;
