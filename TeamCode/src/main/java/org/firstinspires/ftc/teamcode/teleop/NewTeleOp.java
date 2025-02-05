@@ -260,25 +260,32 @@ public class NewTeleOp extends LinearOpMode {
 
             if(currGamepad1.dpad_up && !prevGamepad1.dpad_up){
                 handoffStep = 1;
+                handoffElapsedTime.reset();
             }
 
 
 
             //Handoff Try 2
+
             if(handoffStep == 1) {
                 ports.fr.setPower(0);
                 ports.br.setPower(0);
                 ports.fl.setPower(0);
                 ports.bl.setPower(0);
 
-                ports.intakePitch.setPosition(0.4);
+                ports.intakePitch.setPosition(0.3);
                 ports.outtakeClaw.setPosition(0);
+
                 lsv_lController.setup(-ports.lsv_l.getCurrentPosition());
                 lsv_rController.setup(-ports.lsv_l.getCurrentPosition());
-                handoffStep = 2;
+                if(handoffElapsedTime.milliseconds() >   1000) {
+                    handoffStep = 2;
+                }
             }
 
             if(handoffStep == 2) {
+                ports.outtakeClaw.setPosition(0);
+
                 ports.lsv_l.setPower(lsv_lController.evaluate(-ports.lsv_l.getCurrentPosition())); // error: between 0 and current pos
                 ports.lsv_r.setPower(lsv_rController.evaluate(-ports.lsv_l.getCurrentPosition()));
 
@@ -303,34 +310,36 @@ public class NewTeleOp extends LinearOpMode {
                 // It looks like you are saying to go onto the next step if
                 // one of the slides is MORE than 10 ticks away from 100
                 // is that right?  Shouldn't it move on when the error is less than 10?
-                if(!(Math.abs(ports.lsh_l.getCurrentPosition()-100) > 10 || Math.abs(ports.lsh_r.getCurrentPosition()-100) > 10)){
+                if(Math.abs(100-ports.lsh_l.getCurrentPosition()) < 10 || Math.abs(100-ports.lsh_r.getCurrentPosition()) < 10){
                     handoffStep = 5;
                 }
             }
-            // YOU SKIPPED STEP 5!!!!
-            if(handoffStep == 6) {
-                ports.outtakeClaw.setPosition(1);
-                handoffStep = 7;
+            if(handoffStep == 5) {
+                handoffElapsedTime.reset();
+                //ports.outtakeClaw.setPosition(1);
+                if(handoffElapsedTime.milliseconds() > 500) {
+                    handoffStep = 6;
+                }
             }
             // You might want to use a time to add a little
             // time between closing outtake and opening intake
             // just to avoid the possibility of dropping.
-            if(handoffStep == 7) {
+            if(handoffStep == 6) {
                 ports.intakeClaw.setPosition(1);
+                handoffStep = 7;
+            }
+
+            if(handoffStep == 7) {
+                lsh_lController.setup(250-ports.lsh_l.getCurrentPosition());
+                lsh_rController.setup(250-ports.lsh_r.getCurrentPosition());
                 handoffStep = 8;
             }
 
             if(handoffStep == 8) {
-                lsh_lController.setup(250-ports.lsh_l.getCurrentPosition());
-                lsh_rController.setup(250-ports.lsh_r.getCurrentPosition());
-                handoffStep = 9;
-            }
-
-            if(handoffStep == 9) {
                 ports.lsh_l.setPower(lsh_lController.evaluate(250-ports.lsh_l.getCurrentPosition()));
                 ports.lsh_r.setPower(lsh_rController.evaluate(250-ports.lsh_r.getCurrentPosition()));
 
-                if(!(Math.abs(ports.lsh_l.getCurrentPosition()-250) < 10 || Math.abs(ports.lsh_r.getCurrentPosition()-250) < 10)){
+                if((Math.abs(ports.lsh_l.getCurrentPosition()-250) < 10 || Math.abs(ports.lsh_r.getCurrentPosition()-250) < 10)){
                     handoffStep = 0;
                 }
             }
@@ -443,6 +452,7 @@ public class NewTeleOp extends LinearOpMode {
             telemetry.addData("Location", localizer.getRobotPosition());
             telemetry.addData("Handoff step: ", handoffStep);
             telemetry.addData("button pressed:((((( ", gamepad1.dpad_up);
+            telemetry.addData("timer", handoffElapsedTime);
             Telem.update(this);
 
             elapsedTime.reset();

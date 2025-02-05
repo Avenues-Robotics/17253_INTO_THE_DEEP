@@ -28,12 +28,12 @@ public class PIDTester extends LinearOpMode {
     @Override
     public void runOpMode(){
         //initialize
-        DcMotor slide = hardwareMap.get(DcMotor.class, "lsv_l");
+        DcMotor slide = hardwareMap.get(DcMotor.class, "lsh_l");
         slide.setDirection(DcMotor.Direction.REVERSE);
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        DcMotor slide2 = hardwareMap.get(DcMotor.class, "lsv_r");
+        DcMotor slide2 = hardwareMap.get(DcMotor.class, "lsh_r");
         slide.setDirection(DcMotor.Direction.REVERSE);
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
