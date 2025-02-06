@@ -316,11 +316,11 @@ public class NewTeleOp extends LinearOpMode {
                 // is that right?  Shouldn't it move on when the error is less than 10?
                 if(Math.abs(100-ports.lsh_l.getCurrentPosition()) < 10 || Math.abs(100-ports.lsh_r.getCurrentPosition()) < 10){
                     handoffStep = 5;
+                    handoffElapsedTime.reset();
                 }
             }
             if(handoffStep == 5) {
-                handoffElapsedTime.reset();
-                //ports.outtakeClaw.setPosition(1);
+                ports.outtakeClaw.setPosition(1);
                 if(handoffElapsedTime.milliseconds() > 500) {
                     handoffStep = 6;
                 }
