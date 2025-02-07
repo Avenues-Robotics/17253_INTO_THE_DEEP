@@ -50,21 +50,25 @@ public class Ports {
          if (builder.allActive || builder.wheelsActive || builder.frActive) {
              fr = opMode.hardwareMap.get(DcMotor.class, "FR");
              fr.setDirection(DcMotor.Direction.REVERSE);
+             fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
          }
 
          if (builder.allActive || builder.wheelsActive || builder.flActive) {
              fl = opMode.hardwareMap.get(DcMotor.class, "FL");
              fl.setDirection(DcMotor.Direction.FORWARD);
+             fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
          }
 
          if (builder.allActive || builder.wheelsActive || builder.brActive) {
              br = opMode.hardwareMap.get(DcMotor.class, "BR");
              br.setDirection(DcMotor.Direction.REVERSE);
+             br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
          }
 
          if (builder.allActive || builder.wheelsActive || builder.blActive) {
              bl = opMode.hardwareMap.get(DcMotor.class, "BL");
              bl.setDirection(DcMotor.Direction.FORWARD);
+             bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
          }
 
          if (builder.allActive || builder.slidesActive || builder.lsv_rActive) {

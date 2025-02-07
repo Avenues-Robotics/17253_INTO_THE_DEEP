@@ -87,8 +87,8 @@ public class Driver {
         ports.bl.setPower(speed * frblMultiplier);
 
         // Run while the motors are moving
-        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 30 ||
-                Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 30) {
+        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 60 ||
+                Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 60) {
 
             // Update the telem data
             opMode.telemetry.addData("Running to", "Font Right and Back Left: " + frblTicks + " | Front Left and Back Right: " + flbrTicks);
@@ -158,8 +158,8 @@ public class Driver {
         slideTwo.setup(target - slideTwo.getSlide().getCurrentPosition());
 
         // Run while the motors are moving
-        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 30 ||
-                Math.abs(ports.fl.getTargetPosition()-ports.fl.getCurrentPosition()) >= 30
+        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 60 ||
+                Math.abs(ports.fl.getTargetPosition()-ports.fl.getCurrentPosition()) >= 60
          ) {
 
             slideOne.getSlide().setPower(slideOne.evaluate(target - slideOne.getSlide().getCurrentPosition()));
@@ -212,7 +212,9 @@ public class Driver {
         ports.bl.setPower(-speed);
 
         // Run while both motors are moving
-        while (ports.fr.isBusy() || ports.fl.isBusy()) {
+        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 60 ||
+                Math.abs(ports.fl.getTargetPosition()-ports.fl.getCurrentPosition()) >= 60
+        ) {
             // Update the telem data
             opMode.telemetry.addData("Running to", "Left " + ticks + " | Right: " + -ticks);
             opMode.telemetry.addData("Current pos", "Front Right: " + ports.fr.getCurrentPosition() + " | Front Left: " + ports.fl.getCurrentPosition() + " | Back Right: " + ports.br.getCurrentPosition() + " | Back Left: " + ports.bl.getCurrentPosition());
