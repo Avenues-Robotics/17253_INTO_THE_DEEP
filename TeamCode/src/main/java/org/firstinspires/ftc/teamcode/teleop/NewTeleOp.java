@@ -254,6 +254,10 @@ public class NewTeleOp extends LinearOpMode {
             }
             if(currGamepad2.left_bumper && !prevGamepad2.left_bumper){
                 ports.specimenClaw.setPosition(0);
+                ports.outtakePitchLL.setPosition(0.9);
+                ports.outtakePitchLR.setPosition(0.1);
+                ports.outtakePitchRR.setPosition(0.1);
+                ports.outtakePitchRL.setPosition(0.9);
             }
 
             // **** AUTOMATED HANDOFF ****
