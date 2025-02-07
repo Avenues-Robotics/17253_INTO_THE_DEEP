@@ -58,6 +58,7 @@ public class NewTeleOp extends LinearOpMode {
     private double lsv_lPower= 0;
     private double lsv_rPower = 0;
 
+    boolean running = true;
 
     @Override
     public void runOpMode() {
@@ -106,7 +107,7 @@ public class NewTeleOp extends LinearOpMode {
 
         elapsedTime.reset();
 
-        while (opModeIsActive()) {
+        while (running) {
             localizer.loop();
 
             prevGamepad1.copy(currGamepad1);
@@ -200,6 +201,11 @@ public class NewTeleOp extends LinearOpMode {
             ports.fr.setPower(fr);
             ports.bl.setPower(bl);
             ports.br.setPower(br);
+
+            // **** FINAL HANG ****
+            if(currGamepad1.left_stick_button && currGamepad2.left_stick_button){
+                running = false;
+            }
 
             // **** SERVOS ****
             // flip outtake claw from inside to outside robot
@@ -461,5 +467,11 @@ public class NewTeleOp extends LinearOpMode {
 
             elapsedTime.reset();
         }
+
+        ports.lsv_l.setPower(-1);
+        ports.lsv_r.setPower(-1);
+        sleep(10000);
+        ports.lsv_l.setPower(0);
+        ports.lsv_r.setPower(0);
     }
 }
