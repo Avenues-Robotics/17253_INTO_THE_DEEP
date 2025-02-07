@@ -108,7 +108,6 @@ public class NewTeleOp extends LinearOpMode {
         elapsedTime.reset();
 
         while (running) {
-            localizer.loop();
 
             prevGamepad1.copy(currGamepad1);
             prevGamepad2.copy(currGamepad2);
