@@ -176,6 +176,12 @@ public class NewTeleOp extends LinearOpMode {
             double strafe = gamepad1.left_stick_x;
             double yaw = currGamepad1.right_stick_x;
 
+            if(currGamepad1.dpad_left) {
+                strafe = -1;
+            }else if(currGamepad1.dpad_right) {
+                strafe = 1;
+            }
+
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             double fr = (drive - strafe - yaw) * Math.abs(drive - strafe - yaw);
             double fl = (drive + strafe + yaw) * Math.abs(drive + strafe + yaw);
@@ -237,10 +243,10 @@ public class NewTeleOp extends LinearOpMode {
             // rotates intake claw up and down
             if(currGamepad2.a && !prevGamepad2.a){
                 if(intakeInverse){
-                    ports.intakePitch.setPosition(0.3);
+                    ports.intakePitch.setPosition(0.66);
                     intakeInverse = false;
                 } else {
-                    ports.intakePitch.setPosition(0);
+                    ports.intakePitch.setPosition(0.3);
                 }
             }
 
@@ -256,18 +262,22 @@ public class NewTeleOp extends LinearOpMode {
             // specimen claw open and close
             if(currGamepad2.right_bumper && !prevGamepad2.right_bumper){
                 ports.specimenClaw.setPosition(0.8);
+                ports.outtakePitchLL.setPosition(0.9);
+                ports.outtakePitchLR.setPosition(0.1 );
+                ports.outtakePitchRR.setPosition(0.1);
+                ports.outtakePitchRL.setPosition(0.9);
             }
             if(currGamepad2.left_bumper && !prevGamepad2.left_bumper){
                 ports.specimenClaw.setPosition(0);
-                ports.outtakePitchLL.setPosition(0.9);
-                ports.outtakePitchLR.setPosition(0.1);
-                ports.outtakePitchRR.setPosition(0.1);
-                ports.outtakePitchRL.setPosition(0.9);
+                ports.outtakePitchLL.setPosition(0.95);
+                ports.outtakePitchLR.setPosition(0.05);
+                ports.outtakePitchRR.setPosition(0.05);
+                ports.outtakePitchRL.setPosition(0.95);
             }
 
             // **** AUTOMATED HANDOFF ****
 
-            if(currGamepad1.dpad_up && !prevGamepad1.dpad_up){
+            if(currGamepad1.dpad_up && !prevGamepad1.dpad_up && handoffStep == 0){
                 handoffStep = 1;
                 handoffElapsedTime.reset();
             }
@@ -282,12 +292,20 @@ public class NewTeleOp extends LinearOpMode {
                 ports.fl.setPower(0);
                 ports.bl.setPower(0);
 
-                ports.intakePitch.setPosition(0.3);
+                ports.intakePitch.setPosition(0.66);
                 ports.outtakeClaw.setPosition(0);
+                ports.intakeClaw.setPosition(0.78);
+
+                ports.outtakePitchLL.setPosition(0.97);
+                ports.outtakePitchLR.setPosition(0.03);
+                ports.outtakePitchRR.setPosition(0.03);
+                ports.outtakePitchRL.setPosition(0.97);
 
                 lsv_lController.setup(-ports.lsv_l.getCurrentPosition());
                 lsv_rController.setup(-ports.lsv_l.getCurrentPosition());
-                if(handoffElapsedTime.milliseconds() >   1000) {
+                lsh_lController.setup(-ports.lsh_l.getCurrentPosition());
+                lsh_rController.setup(-ports.lsh_r.getCurrentPosition());
+                if(handoffElapsedTime.milliseconds() > 300) {
                     handoffStep = 2;
                 }
             }
@@ -297,58 +315,36 @@ public class NewTeleOp extends LinearOpMode {
 
                 ports.lsv_l.setPower(lsv_lController.evaluate(-ports.lsv_l.getCurrentPosition())); // error: between 0 and current pos
                 ports.lsv_r.setPower(lsv_rController.evaluate(-ports.lsv_l.getCurrentPosition()));
+                ports.lsh_l.setPower(lsh_lController.evaluate(-ports.lsh_l.getCurrentPosition()));
+                ports.lsh_r.setPower(lsh_rController.evaluate(-ports.lsh_r.getCurrentPosition()));
 
-                if(ports.lsv_l.getCurrentPosition() < 10) {
+                if(ports.lsv_l.getCurrentPosition() < 10 && (Math.abs(-ports.lsh_l.getCurrentPosition()) < 10 || Math.abs(-ports.lsh_r.getCurrentPosition()) < 10)) {
                     handoffStep = 3;
-                }
-            }
-
-            // 3 and 4 can be combined
-            if(handoffStep == 3) {
-                lsh_lController.setup(100-ports.lsh_l.getCurrentPosition());
-                lsh_rController.setup(100-ports.lsh_r.getCurrentPosition());
-                handoffStep = 4;
-            }
-
-            if(handoffStep == 4) {
-                ports.lsh_l.setPower(lsh_lController.evaluate(100-ports.lsh_l.getCurrentPosition()));
-                ports.lsh_r.setPower(lsh_rController.evaluate(100-ports.lsh_r.getCurrentPosition()));
-                // Its a little confusing the at order of your subtraction changes
-                // It doesn't make a difference, but it catches my eye as a possible error.
-
-                // It looks like you are saying to go onto the next step if
-                // one of the slides is MORE than 10 ticks away from 100
-                // is that right?  Shouldn't it move on when the error is less than 10?
-                if(Math.abs(100-ports.lsh_l.getCurrentPosition()) < 10 || Math.abs(100-ports.lsh_r.getCurrentPosition()) < 10){
-                    handoffStep = 5;
                     handoffElapsedTime.reset();
                 }
             }
-            if(handoffStep == 5) {
+
+            if(handoffStep == 3) {
                 ports.outtakeClaw.setPosition(1);
-                if(handoffElapsedTime.milliseconds() > 500) {
-                    handoffStep = 6;
+                if(handoffElapsedTime.milliseconds() > 1000) {
+                    handoffStep = 4;
                 }
             }
             // You might want to use a time to add a little
             // time between closing outtake and opening intake
             // just to avoid the possibility of dropping.
-            if(handoffStep == 6) {
-                ports.intakeClaw.setPosition(1);
-                handoffStep = 7;
+            if(handoffStep == 4) {
+                ports.intakeClaw.setPosition(0);
+                lsh_lController.setup(350-ports.lsh_l.getCurrentPosition());
+                lsh_rController.setup(350-ports.lsh_r.getCurrentPosition());
+                handoffStep = 5;
             }
 
-            if(handoffStep == 7) {
-                lsh_lController.setup(250-ports.lsh_l.getCurrentPosition());
-                lsh_rController.setup(250-ports.lsh_r.getCurrentPosition());
-                handoffStep = 8;
-            }
+            if(handoffStep == 5) {
+                ports.lsh_l.setPower(lsh_lController.evaluate(350-ports.lsh_l.getCurrentPosition()));
+                ports.lsh_r.setPower(lsh_rController.evaluate(350-ports.lsh_r.getCurrentPosition()));
 
-            if(handoffStep == 8) {
-                ports.lsh_l.setPower(lsh_lController.evaluate(250-ports.lsh_l.getCurrentPosition()));
-                ports.lsh_r.setPower(lsh_rController.evaluate(250-ports.lsh_r.getCurrentPosition()));
-
-                if((Math.abs(ports.lsh_l.getCurrentPosition()-250) < 10 || Math.abs(ports.lsh_r.getCurrentPosition()-250) < 10)){
+                if((Math.abs(ports.lsh_l.getCurrentPosition()-350) < 10 || Math.abs(ports.lsh_r.getCurrentPosition()-350) < 10)){
                     handoffStep = 0;
                 }
             }
@@ -466,6 +462,11 @@ public class NewTeleOp extends LinearOpMode {
 
             elapsedTime.reset();
         }
+
+        ports.fr.setPower(0);
+        ports.fl.setPower(0);
+        ports.br.setPower(0);
+        ports.bl.setPower(0);
 
         ports.lsv_l.setPower(-1);
         ports.lsv_r.setPower(-1);

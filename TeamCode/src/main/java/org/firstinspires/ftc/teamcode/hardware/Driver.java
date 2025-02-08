@@ -87,8 +87,8 @@ public class Driver {
         ports.bl.setPower(speed * frblMultiplier);
 
         // Run while the motors are moving
-        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 40 ||
-                Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 40) {
+        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 30 ||
+                Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 30) {
 
             // Update the telem data
             opMode.telemetry.addData("Running to", "Font Right and Back Left: " + frblTicks + " | Front Left and Back Right: " + flbrTicks);
@@ -158,8 +158,8 @@ public class Driver {
         slideTwo.setup(target - slideTwo.getSlide().getCurrentPosition());
 
         // Run while the motors are moving
-        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 40 ||
-                Math.abs(ports.fl.getTargetPosition()-ports.fl.getCurrentPosition()) >= 40
+        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 30 ||
+                Math.abs(ports.fl.getTargetPosition()-ports.fl.getCurrentPosition()) >= 30
          ) {
 
             slideOne.getSlide().setPower(slideOne.evaluate(target - slideOne.getSlide().getCurrentPosition()));
@@ -214,8 +214,8 @@ public class Driver {
         ports.bl.setPower(-speed);
 
         // Run while both motors are moving
-        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 40 ||
-                Math.abs(ports.fl.getTargetPosition()-ports.fl.getCurrentPosition()) >= 40
+        while (Math.abs(ports.fr.getTargetPosition()-ports.fr.getCurrentPosition()) >= 50 ||
+                Math.abs(ports.fl.getTargetPosition()-ports.fl.getCurrentPosition()) >= 50
         ) {
             // Update the telem data
             opMode.telemetry.addData("Running to", "Left " + ticks + " | Right: " + -ticks);
