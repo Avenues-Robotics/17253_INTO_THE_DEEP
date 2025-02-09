@@ -45,6 +45,7 @@ public class NewTeleOp extends LinearOpMode {
 
     Localization localizer;
 
+    boolean isSpecimenSide = false;
 
     public static Position startingPosition = new Position(DistanceUnit.INCH, 0, 0, 0, 0);
     public static YawPitchRollAngles startingRotation = new YawPitchRollAngles(AngleUnit.DEGREES, 0, 0, 0, 0);
@@ -177,9 +178,11 @@ public class NewTeleOp extends LinearOpMode {
             double yaw = currGamepad1.right_stick_x;
 
             if(currGamepad1.dpad_left) {
-                strafe = -1;
-            }else if(currGamepad1.dpad_right) {
                 strafe = 1;
+                drive = 0.2;
+            }else if(currGamepad1.dpad_right) {
+                strafe = -1;
+                drive = 0.2;
             }
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
@@ -263,9 +266,10 @@ public class NewTeleOp extends LinearOpMode {
             if(currGamepad2.right_bumper && !prevGamepad2.right_bumper){
                 ports.specimenClaw.setPosition(0.8);
                 ports.outtakePitchLL.setPosition(0.9);
-                ports.outtakePitchLR.setPosition(0.1 );
+                ports.outtakePitchLR.setPosition(0.1);
                 ports.outtakePitchRR.setPosition(0.1);
                 ports.outtakePitchRL.setPosition(0.9);
+                isSpecimenSide = true;
             }
             if(currGamepad2.left_bumper && !prevGamepad2.left_bumper){
                 ports.specimenClaw.setPosition(0);
@@ -349,6 +353,9 @@ public class NewTeleOp extends LinearOpMode {
                 }
             }
 
+            if(isSpecimenSide && ports.lsv_l.getCurrentPosition() > 2230 && ports.lsv_l.getCurrentPosition() < 2240) {
+                gamepad2.rumble(10);
+            }
 
              /*
              * 1. intakeClaw -> 0.05 & outtakeClaw -> 0.15 & intakePitch -> 0.4 & outtakePitch -> 0 & horizontalSlides -> 1700 if horizontalSlides < 1700 & verticalSlides -> 0
