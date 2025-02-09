@@ -378,14 +378,13 @@ public class Driver {
         }
     }
 
-    public static void linearSlidesHDown(Ports ports, double power, double maxExtension) {
-        if (ports.lsh_r.getCurrentPosition()>maxExtension && ports.lsh_l.getCurrentPosition()>maxExtension){
-            ports.lsh_r.setPower(power);
-            ports.lsh_l.setPower(power);
-        }
-        else {
-            ports.lsh_r.setPower(0);
-            ports.lsh_l.setPower(0);
+    public static void linearSlides(PIDController slideOne, PIDController slideTwo, int target) {
+        slideOne.setup(target-slideOne.getSlide().getCurrentPosition());
+        slideTwo.setup(target-slideOne.getSlide().getCurrentPosition());
+
+        while(Math.abs(target-slideOne.getSlide().getCurrentPosition()) < 20){
+            slideOne.getSlide().setPower(slideOne.evaluate(target-slideOne.getSlide().getCurrentPosition()));
+            slideTwo.getSlide().setPower(slideTwo.evaluate(target-slideOne.getSlide().getCurrentPosition()));
         }
     }
 

@@ -61,6 +61,8 @@ public class NewTeleOp extends LinearOpMode {
 
     int lsv_lLast;
 
+    public static double rollStart;
+
     @Override
     public void runOpMode() {
 
@@ -107,6 +109,8 @@ public class NewTeleOp extends LinearOpMode {
         waitForStart();
 
         elapsedTime.reset();
+
+        ports.intakeRoll.setPosition(rollStart);
 
         while (running) {
 

@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.hardware.Ports;
 
 //Create an opmode class
 @Config
-@Autonomous(name="Tritonics Auto")
+@Autonomous(name="Tritonics Auto Specimen")
 public class AutoOpMode extends LinearOpMode {
 
     Ports ports;
