@@ -45,8 +45,6 @@ public class NewTeleOp extends LinearOpMode {
 
     Localization localizer;
 
-    boolean isSpecimenSide = false;
-
     public static Position startingPosition = new Position(DistanceUnit.INCH, 0, 0, 0, 0);
     public static YawPitchRollAngles startingRotation = new YawPitchRollAngles(AngleUnit.DEGREES, 0, 0, 0, 0);
 
@@ -270,7 +268,6 @@ public class NewTeleOp extends LinearOpMode {
                 ports.outtakePitchLR.setPosition(0.1);
                 ports.outtakePitchRR.setPosition(0.1);
                 ports.outtakePitchRL.setPosition(0.9);
-                isSpecimenSide = true;
             }
             if(currGamepad2.left_bumper && !prevGamepad2.left_bumper){
                 ports.specimenClaw.setPosition(0);
@@ -353,12 +350,6 @@ public class NewTeleOp extends LinearOpMode {
                     handoffStep = 0;
                 }
             }
-
-            if(isSpecimenSide && ports.lsv_l.getCurrentPosition() > 2230 && lsv_lLast < 2230) {
-                gamepad2.rumble(10);
-            }
-
-            lsv_lLast = ports.lsv_l.getCurrentPosition();
 
              /*
              * 1. intakeClaw -> 0.05 & outtakeClaw -> 0.15 & intakePitch -> 0.4 & outtakePitch -> 0 & horizontalSlides -> 1700 if horizontalSlides < 1700 & verticalSlides -> 0
