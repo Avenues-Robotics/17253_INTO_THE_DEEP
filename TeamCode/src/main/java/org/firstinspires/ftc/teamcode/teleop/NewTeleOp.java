@@ -61,6 +61,8 @@ public class NewTeleOp extends LinearOpMode {
 
     boolean running = true;
 
+    int lsv_lLast;
+
     @Override
     public void runOpMode() {
 
@@ -115,7 +117,6 @@ public class NewTeleOp extends LinearOpMode {
 
             currGamepad1.copy(gamepad1);
             currGamepad2.copy(gamepad2);
-
 
             // **** VERTICAL SLIDES ****
             // USE CONTROLLER TO SET STATE
@@ -353,9 +354,11 @@ public class NewTeleOp extends LinearOpMode {
                 }
             }
 
-            if(isSpecimenSide && ports.lsv_l.getCurrentPosition() > 2230 && ports.lsv_l.getCurrentPosition() < 2240) {
+            if(isSpecimenSide && ports.lsv_l.getCurrentPosition() > 2230 && lsv_lLast < 2230) {
                 gamepad2.rumble(10);
             }
+
+            lsv_lLast = ports.lsv_l.getCurrentPosition();
 
              /*
              * 1. intakeClaw -> 0.05 & outtakeClaw -> 0.15 & intakePitch -> 0.4 & outtakePitch -> 0 & horizontalSlides -> 1700 if horizontalSlides < 1700 & verticalSlides -> 0
