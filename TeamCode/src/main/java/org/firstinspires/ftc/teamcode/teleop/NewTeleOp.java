@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.hardware.Telem;
 
 
 @TeleOp(name = "TeleOp Tritonics State")
+@Config
 public class NewTeleOp extends LinearOpMode {
 
     Ports ports;
@@ -60,8 +62,6 @@ public class NewTeleOp extends LinearOpMode {
     boolean running = true;
 
     int lsv_lLast;
-
-    public static double rollStart;
 
     @Override
     public void runOpMode() {
@@ -110,7 +110,7 @@ public class NewTeleOp extends LinearOpMode {
 
         elapsedTime.reset();
 
-        ports.intakeRoll.setPosition(rollStart);
+        ports.intakeRoll.setPosition(0.5);
 
         while (running) {
 

@@ -382,7 +382,7 @@ public class Driver {
         slideOne.setup(target-slideOne.getSlide().getCurrentPosition());
         slideTwo.setup(target-slideOne.getSlide().getCurrentPosition());
 
-        while(Math.abs(target-slideOne.getSlide().getCurrentPosition()) < 20){
+        while(Math.abs(target-slideOne.getSlide().getCurrentPosition()) > 20){
             slideOne.getSlide().setPower(slideOne.evaluate(target-slideOne.getSlide().getCurrentPosition()));
             slideTwo.getSlide().setPower(slideTwo.evaluate(target-slideOne.getSlide().getCurrentPosition()));
         }

@@ -88,7 +88,7 @@ public class AutoOpMode extends LinearOpMode {
         ports.outtakePitchRR.setPosition(0.1);
         ports.outtakePitchRL.setPosition(0.9);
         Driver.driveSlides(this, ports, 0.35, 85, 160, lsv_lController, lsv_rController, 2300);
-        Driver.driveSlides(this, ports, 0.75, 20, 235, lsv_lController, lsv_rController, 1000);
+        Driver.driveSlides(this, ports, 0.75, 30, 235, lsv_lController, lsv_rController, 1000);
         Driver.driveSlides(this, ports, 0.6, 40, 0, lsv_lController, lsv_rController, 0);
         ports.specimenClaw.setPosition(0);
         Driver.rotate(this, ports, 0.75, -90);
@@ -96,8 +96,8 @@ public class AutoOpMode extends LinearOpMode {
         ports.outtakePitchLR.setPosition(0.05);
         ports.outtakePitchRR.setPosition(0.05);
         ports.outtakePitchRL.setPosition(0.95);
-        Driver.drive(this, ports, 1, 75, 0);
-        Driver.rotate(this, ports, 0.75, -90);
+        Driver.drive(this, ports, 1, 65, 0);
+        Driver.rotate(this, ports, 0.75, -92);
         Driver.drive(this, ports, 1, 75, 0);
         Driver.drive(this, ports, 1, 44, 90);
         Driver.drive(this, ports, 0.8, 130, 160);
@@ -111,7 +111,7 @@ public class AutoOpMode extends LinearOpMode {
         ports.outtakePitchLR.setPosition(0.1);
         ports.outtakePitchRR.setPosition(0.1);
         ports.outtakePitchRL.setPosition(0.9);
-        Driver.driveSlides(this, ports, 1, 110, 290, lsv_lController, lsv_rController, 2300);
+        Driver.driveSlides(this, ports, 1, 140, 290, lsv_lController, lsv_rController, 2300);
         Driver.rotate(this, ports, 1, 160);
         Driver.driveSlides(this, ports, 1, 110, 150, lsv_lController, lsv_rController, 2300);
         Driver.driveSlides(this, ports, 0.8, 40, 240, lsv_lController, lsv_rController, 0);
@@ -122,7 +122,7 @@ public class AutoOpMode extends LinearOpMode {
         ports.outtakePitchRR.setPosition(0.05);
         ports.outtakePitchRL.setPosition(0.95);
         Driver.rotate(this, ports, 1, -90);
-        Driver.driveSlides(this, ports, 1, 100, 0, lsv_lController, lsv_rController, 0);
+        Driver.driveSlides(this, ports, 1, 80, 0, lsv_lController, lsv_rController, 0);
         Driver.rotate(this, ports, 1, -90);
         Driver.drive(this, ports, 1, 30, 180);
         Driver.drive(this, ports, 0.3, 20, 180);

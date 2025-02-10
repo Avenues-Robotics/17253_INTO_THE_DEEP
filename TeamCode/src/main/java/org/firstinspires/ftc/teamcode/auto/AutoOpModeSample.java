@@ -37,8 +37,8 @@ public class AutoOpModeSample extends LinearOpMode {
     public static int waitTime;
 
     public static double speed1 = 0.2;
-    public static double dist1 = 40;
-    public static double deg1 = 255;
+    public static double dist1 = 45;
+    public static double deg1 = 240;
     public static int target1 = 3300;
 
     public static double speed2 = 1;
@@ -49,11 +49,11 @@ public class AutoOpModeSample extends LinearOpMode {
     public static double deg3 = -45;
 
     public static double speed4 = 0.7;
-    public static double dist4 = 30;
+    public static double dist4 = 45;
     public static double deg4 = 180;
 
     public static double speed5 = 1;
-    public static double dist5 = 80;
+    public static double dist5 = 40;
     public static double deg5 = 0;
     public static int target5 = 2000;
 
@@ -105,6 +105,7 @@ public class AutoOpModeSample extends LinearOpMode {
         ports.outtakePitchRL.setPosition(0);
         sleep(1000);
         ports.outtakeClaw.setPosition(0);
+        sleep(500);
         ports.outtakePitchLL.setPosition(1);
         ports.outtakePitchLR.setPosition(0);
         ports.outtakePitchRR.setPosition(0);
