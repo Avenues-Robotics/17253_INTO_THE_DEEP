@@ -250,18 +250,21 @@ public class NewTeleOp extends LinearOpMode {
             if(currGamepad2.a && !prevGamepad2.a){
                 if(intakeInverse){
                     ports.intakePitch.setPosition(0.66);
+                    ports.intakeRoll.setPosition(0.5);
                     intakeInverse = false;
                 } else {
                     ports.intakePitch.setPosition(0.3);
+                    ports.intakeRoll.setPosition(0.5);
                 }
             }
 
             // horizontal rotates intake claw
             if(currGamepad2.b) {
                 if(intakeInverse){
-                    ports.intakeRoll.setPosition(ports.intakeRoll.getPosition() + elapsedTime.seconds());
+                    ports.intakeRoll.setPosition(0.5);
+                    intakeInverse = false;
                 } else {
-                    ports.intakeRoll.setPosition(ports.intakeRoll.getPosition() - elapsedTime.seconds());
+                    ports.intakeRoll.setPosition(0.17);
                 }
             }
 
